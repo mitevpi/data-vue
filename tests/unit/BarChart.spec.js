@@ -1,5 +1,5 @@
 import { shallowMount } from "@vue/test-utils";
-// import BarChart from "../../src/components/BarChart.vue";
+import BarChart from "../../src/components/BarChart.vue";
 
 const barData = [
   {
