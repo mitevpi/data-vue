@@ -1,0 +1,46 @@
+{
+  "name": "data-vue",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build --target lib --name data-vue ./src/components/index.js",
+    "test": "vue-cli-service test:unit",
+    "lint": "vue-cli-service lint --fix",
+    "docs": "vuese gen --outDir=docs"
+  },
+  "main": "./dist/data-vue.common.js",
+  "unpkg": "./dist/data-vue.umd.min.js",
+  "files": [
+    "src/components",
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "dependencies": {
+    "d3-array": "^2.2.0",
+    "d3-scale": "^3.0.0",
+    "d3-selection": "^1.4.0",
+    "d3-transition": "^1.2.0",
+    "vue": "^2.6.10"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.9.2",
+    "@vue/cli-plugin-eslint": "^3.9.2",
+    "@vue/cli-plugin-unit-jest": "^3.9.0",
+    "@vue/cli-service": "^3.9.3",
+    "@vue/test-utils": "1.0.0-beta.29",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-eslint": "^10.0.2",
+    "babel-jest": "^24.8.0",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-vue": "^5.2.3",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.1",
+    "vue-template-compiler": "^2.6.10"
+  }
+}
