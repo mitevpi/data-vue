@@ -1,6 +1,6 @@
 {
   "name": "@mitevpi/v3",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Modular, reusable D3 data visualization components for Vue.js.",
   "license": "MIT",
   "repository": "mitevpi/data-vue",
@@ -12,7 +12,7 @@
   },
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --target lib --name v3 ./src/components/index.js",
+    "build": "vue-cli-service build --target lib --name v3 ./src/index.js",
     "test": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint --fix",
     "docs": "vuese gen --outDir=docs",
