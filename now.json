@@ -1,0 +1,9 @@
+{
+    "version": 2,
+    "name": "v3",
+    "alias": "v3",
+    "files": ["docs"],
+    "github": {
+      "enabled": true
+    }
+  }
