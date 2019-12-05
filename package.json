@@ -1,6 +1,6 @@
 {
   "name": "@mitevpi/v3",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Modular, reusable D3 data visualization components for Vue.js.",
   "license": "MIT",
   "repository": "mitevpi/data-vue",
@@ -16,7 +16,7 @@
     "test": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint --fix",
     "docs": "vuese gen --outDir=docs",
-    "prerelease": "npm run lint --fix && npm run build && npm run docs",
+    "prerelease": "npm run lint --fix & npm t && npm run build && npm run docs",
     "release": "standard-version",
     "postpublish": "git push origin master --follow-tags"
   },
@@ -56,7 +56,6 @@
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.3",
-    "babel-jest": "^24.9.0",
     "eslint": "^6.7.2",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.7.0",
