@@ -1,9 +1,10 @@
 {
-  "name": "data-vue",
-  "version": "0.1.0",
+  "name": "@mitevpi/v3",
+  "version": "0.1.1",
   "description": "Modular, reusable D3 data visualization components for Vue.js.",
   "license": "MIT",
   "repository": "mitevpi/data-vue",
+  "private": false,
   "author": {
     "name": "Petr Mitev",
     "email": "p.mitevpi@gmail.com",
@@ -11,15 +12,18 @@
   },
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --target lib --name data-vue ./src/components/index.js",
+    "build": "vue-cli-service build --target lib --name v3 ./src/components/index.js",
     "test": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint --fix",
-    "docs": "vuese gen --outDir=docs"
+    "docs": "vuese gen --outDir=docs",
+    "prerelease": "npm run lint --fix && npm run build && npm run docs",
+    "release": "standard-version",
+    "postpublish": "git push origin master --follow-tags"
   },
-  "main": "dist/data-vue.common.js",
-  "unpkg": "dist/data-vue.umd.min.js",
-  "browser": "dist/data-vue.umd.min.js",
-  "cdn": "dist/data-vue.umd.min.js",
+  "main": "dist/v3.common.js",
+  "unpkg": "dist/v3.umd.min.js",
+  "browser": "dist/v3.umd.min.js",
+  "cdn": "dist/v3.umd.min.js",
   "files": [
     "src/components",
     "dist",
@@ -59,6 +63,7 @@
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-vue": "^6.0.1",
+    "standard-version": "7.0.1",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.1",
     "vue-template-compiler": "^2.6.10"
