@@ -1,9 +1,0 @@
-{
-    "version": 2,
-    "name": "v3js",
-    "alias": "v3js",
-    "files": ["docs"],
-    "github": {
-      "enabled": true
-    }
-  }
