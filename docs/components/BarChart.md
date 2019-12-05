@@ -1,5 +1,7 @@
 # BarChart
 
+Animated, reactive bar chart
+
 ## Props
 
 <!-- @vuese:BarChart:props:start -->
@@ -25,5 +27,30 @@
 |AddResizeListener|Add a listener to udpate and redraw the chart after X seconds of a resize event.|-|
 
 <!-- @vuese:BarChart:methods:end -->
+
+
+## Computed
+
+<!-- @vuese:BarChart:computed:start -->
+|Computed|Type|Description|From Store|
+|---|---|---|---|
+|dataMax|`Number`|The maximum value in the core dataset.|No|
+|dataMin|`Number`|The minimum value in the core dataset.|No|
+|xScale|`Function`|The D3 scale function for the X axis (based on the X key).|No|
+|yScale|`Function`|The D3 scale function for the Y axis (based on the Y key).|No|
+|svgHeight|`Number`|The computed height of the SVG container, based on the overall width.|No|
+
+<!-- @vuese:BarChart:computed:end -->
+
+
+## Data
+
+<!-- @vuese:BarChart:data:start -->
+|Name|Type|Description|Default|
+|---|---|---|---|
+|svgWidth|`Number`|The width of the SVG element, determined by the width of the parent div.|0|
+|redrawToggle|`Boolean`|Whether or not to redraw the bar chart and re-run the animation (based on resize event).|true|
+
+<!-- @vuese:BarChart:data:end -->
 
 

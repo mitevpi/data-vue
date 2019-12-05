@@ -12,6 +12,7 @@ module.exports = {
     "eslint:recommended"
   ],
   rules: {
+    "no-unused-vars": "warn",
     "no-console": "off",
     "prettier/prettier": "warn",
     "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
