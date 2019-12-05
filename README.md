@@ -31,9 +31,11 @@ Currently, this package depends on the following modules to work. These must be 
 
 For single use in a component or small set of components.
 
+Static import using the compiled `.js` file.
+
 ```js
 // component.vue
-import { BarChart } from "@mitevpi/v3/src/components";
+import { BarChart } from "@mitevpi/v3";
 
 export default {
   name: "Tester",
@@ -43,6 +45,8 @@ export default {
 };
 </script>
 ```
+
+Chunked import using the source `.vue` file.
 
 ```js
 // component.vue
@@ -57,7 +61,9 @@ export default {
 
 #### Global
 
-Importing the single file .vue components directly. (If using Vue CLI 3 with Babel or TypeScript, it's recommended that you import its src directory. This will minimize the size of your application by preventing duplicate or unnecessary polyfills.)
+Importing the single file `.vue` components directly. (If using Vue CLI 3 with Babel or TypeScript, it's recommended that you import its src directory. This will minimize the size of your application by preventing duplicate or unnecessary polyfills.)
+
+Importing source `.vue` file.
 
 ```js
 // main.js
@@ -65,11 +71,10 @@ import BarChart from "@mitevpi/v3/src/components";
 Vue.use(BarChart);
 ```
 
-Importing the bundled .js and .css components individually.
+Importing the bundled `.js`.
 
 ```js
 import BarChart from "@mitevpi/v3";
-import "@mitevpi/v3/dist/v3.css";
 Vue.use(BarChart);
 ```
 

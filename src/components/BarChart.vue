@@ -1,5 +1,5 @@
 <template>
-  <div id="container" class="svg-container" align="center" :style="cssProps">
+  <div ref="container" class="svg-container" align="center" :style="cssProps">
     <h1 v-show="title !== null" class="chart-title">{{ title }}</h1>
     <svg v-if="redrawToggle === true" :width="svgWidth" :height="svgHeight">
       <g>
@@ -116,7 +116,7 @@ export default {
     }
   },
   mounted() {
-    this.svgWidth = document.getElementById("container").offsetWidth * 0.75;
+    this.svgWidth = this.$refs.container.offsetWidth * 0.75;
     this.AddResizeListener();
     // TODO: ADD TOGGLE FOR DIFFERENT LOAD ANIMATIONS
     this.AnimateLoad();
@@ -147,12 +147,12 @@ export default {
      */
     AddResizeListener() {
       // redraw the chart 300ms after the window has been resized
+      const self = this;
       window.addEventListener("resize", () => {
         this.$data.redrawToggle = false;
         setTimeout(() => {
           this.$data.redrawToggle = true;
-          this.$data.svgWidth =
-            document.getElementById("container").offsetWidth * 0.75;
+          this.$data.svgWidth = self.$refs.container.offsetWidth * 0.75;
           this.AnimateLoad();
         }, 300);
       });
