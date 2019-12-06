@@ -25,3 +25,30 @@ export function Grow(
       return svgHeight - yScale(d[yKey]);
     });
 }
+
+export function SortByX(
+  groupId,
+  data,
+  xScale,
+  xKey,
+  duration = 1000,
+  delay = 150
+) {
+  xScale.domain(
+    data.map(d => {
+      return d[xKey];
+    })
+  );
+
+  selectAll(`#${groupId}`)
+    .selectAll("rect")
+    .data(data)
+    .transition()
+    .delay((d, i) => {
+      return i * delay;
+    })
+    .duration(duration)
+    .attr("x", d => {
+      return xScale(d[xKey]);
+    });
+}

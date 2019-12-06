@@ -1,17 +1,30 @@
 <template>
   <div ref="container" class="svg-container" align="center" :style="cssProps">
     <h1 v-show="title !== null" class="chart-title">{{ title }}</h1>
-    <svg v-if="redrawToggle === true" :width="svgWidth" :height="svgHeight">
+    <svg
+      v-if="redrawToggle === true"
+      :width="svgWidth"
+      :height="svgHeight"
+      @click="SortX"
+    >
       <g :id="groupId">
         <rect
           v-for="item in data"
-          :key="item[xKey]"
+          :key="item[xKey] + 'bar'"
           class="bar-positive"
           :x="xScale(item[xKey])"
           :y="yScale(0)"
           :width="xScale.bandwidth()"
           :height="0"
         />
+        <!-- <text
+          v-for="item in data"
+          :key="item[xKey] + 'txt'"
+          :x="xScale(item[xKey])"
+          :y="yScale(item[yKey])"
+        >
+          {{ item[xKey] }}
+        </text> -->
       </g>
     </svg>
   </div>
@@ -23,7 +36,7 @@ import { scaleLinear, scaleBand } from "d3-scale";
 import { selectAll } from "d3-selection";
 import { transition } from "d3-transition";
 
-import { Grow } from "../js/AnimateBar";
+import { Grow, SortByX } from "../js/AnimateBar";
 
 // Animated, reactive bar chart
 export default {
@@ -136,6 +149,12 @@ export default {
      */
     AnimateLoad() {
       Grow(this.groupId, this.data, this.yScale, this.yKey, this.svgHeight);
+    },
+    SortX() {
+      SortByX(this.groupId, this.data, this.xScale, this.xKey, this.svgHeight);
+      this.data.sort((a, b) => {
+        return a[this.yKey] - b[this.yKey];
+      });
     },
     /**
      * @vuese
