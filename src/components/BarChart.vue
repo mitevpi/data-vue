@@ -52,16 +52,13 @@ export default {
      * @vuese
      * Whether or not to redraw the bar chart and re-run the animation (based on resize event).
      */
-    redrawToggle: true,
-    /**
-     * @vuese
-     * Unique ID of this component (used for selecting items);
-     */
-    id: null
+    redrawToggle: true
   }),
   computed: {
     groupId() {
-      return `${String(this.id)}g`;
+      return Math.random()
+        .toString(36)
+        .substring(7);
     },
     /**
      * @vuese
@@ -124,14 +121,10 @@ export default {
     }
   },
   mounted() {
-    this.id = this._uid;
     this.svgWidth = this.$refs.container.offsetWidth * 0.75;
     this.AddResizeListener();
     // TODO: ADD TOGGLE FOR DIFFERENT LOAD ANIMATIONS
     this.AnimateLoad();
-    // const test = selectAll("g").selectAll("rect");
-    const test = selectAll(`#${this.groupId}`);
-    console.log(test);
   },
   methods: {
     /**
@@ -139,7 +132,8 @@ export default {
      * Run the animation which "grows" the bar chart from the default 0 values.
      */
     AnimateLoad() {
-      selectAll("rect")
+      selectAll(`#${this.groupId}`)
+        .selectAll("rect")
         .data(this.data)
         .transition()
         .delay((d, i) => {
