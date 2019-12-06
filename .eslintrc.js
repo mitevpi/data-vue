@@ -12,6 +12,11 @@ module.exports = {
     "eslint:recommended"
   ],
   rules: {
+    "import/prefer-default-export": "off",
+    "array-callback-return": "off",
+    "no-param-reassign": "off",
+    "no-underscore-dangle": "off",
+    "no-unused-vars": "warn",
     "no-console": "off",
     "prettier/prettier": "warn",
     "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",

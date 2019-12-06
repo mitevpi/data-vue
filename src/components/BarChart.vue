@@ -1,27 +1,42 @@
 <template>
-  <div id="container" class="svg-container" align="center" :style="cssProps">
+  <div ref="container" class="svg-container" align="center" :style="cssProps">
     <h1 v-show="title !== null" class="chart-title">{{ title }}</h1>
-    <svg v-if="redrawToggle === true" :width="svgWidth" :height="svgHeight">
-      <g>
+    <svg
+      v-if="redrawToggle === true"
+      :width="svgWidth"
+      :height="svgHeight"
+      @click="SortX"
+    >
+      <g :id="groupId">
         <rect
           v-for="item in data"
-          :key="item[xKey]"
+          :key="item[xKey] + 'bar'"
           class="bar-positive"
           :x="xScale(item[xKey])"
           :y="yScale(0)"
           :width="xScale.bandwidth()"
           :height="0"
         />
+        <!-- <text
+          v-for="item in data"
+          :key="item[xKey] + 'txt'"
+          :x="xScale(item[xKey])"
+          :y="yScale(item[yKey])"
+        >
+          {{ item[xKey] }}
+        </text> -->
       </g>
     </svg>
   </div>
 </template>
 
 <script>
+import { ArraysObjective } from "@mitevpi/algos";
 import { scaleLinear, scaleBand } from "d3-scale";
-import { max, min } from "d3-array";
 import { selectAll } from "d3-selection";
 import { transition } from "d3-transition";
+
+import { Grow, SortByX } from "../js/AnimateBar";
 
 // Animated, reactive bar chart
 export default {
@@ -57,13 +72,21 @@ export default {
   computed: {
     /**
      * @vuese
+     * A unique ID for the `svg`/`g` container for this chart.
+     * @type String
+     */
+    groupId() {
+      return Math.random()
+        .toString(36)
+        .substring(7);
+    },
+    /**
+     * @vuese
      * The maximum value in the core dataset.
      * @type Number
      */
     dataMax() {
-      return max(this.data, d => {
-        return d[this.yKey];
-      });
+      return ArraysObjective.max(this.data, this.yKey);
     },
     /**
      * @vuese
@@ -71,9 +94,7 @@ export default {
      * @type Number
      */
     dataMin() {
-      return min(this.data, d => {
-        return d[this.yKey];
-      });
+      return ArraysObjective.min(this.data, this.yKey);
     },
     /**
      * @vuese
@@ -116,7 +137,7 @@ export default {
     }
   },
   mounted() {
-    this.svgWidth = document.getElementById("container").offsetWidth * 0.75;
+    this.svgWidth = this.$refs.container.offsetWidth * 0.75;
     this.AddResizeListener();
     // TODO: ADD TOGGLE FOR DIFFERENT LOAD ANIMATIONS
     this.AnimateLoad();
@@ -127,19 +148,13 @@ export default {
      * Run the animation which "grows" the bar chart from the default 0 values.
      */
     AnimateLoad() {
-      selectAll("rect")
-        .data(this.data)
-        .transition()
-        .delay((d, i) => {
-          return i * 150;
-        })
-        .duration(1000)
-        .attr("y", d => {
-          return this.yScale(d[this.yKey]);
-        })
-        .attr("height", d => {
-          return this.svgHeight - this.yScale(d[this.yKey]);
-        });
+      Grow(this.groupId, this.data, this.yScale, this.yKey, this.svgHeight);
+    },
+    SortX() {
+      SortByX(this.groupId, this.data, this.xScale, this.xKey, this.svgHeight);
+      this.data.sort((a, b) => {
+        return a[this.yKey] - b[this.yKey];
+      });
     },
     /**
      * @vuese
@@ -147,13 +162,13 @@ export default {
      */
     AddResizeListener() {
       // redraw the chart 300ms after the window has been resized
+      const self = this;
       window.addEventListener("resize", () => {
-        this.$data.redrawToggle = false;
+        self.redrawToggle = false;
         setTimeout(() => {
-          this.$data.redrawToggle = true;
-          this.$data.svgWidth =
-            document.getElementById("container").offsetWidth * 0.75;
-          this.AnimateLoad();
+          self.redrawToggle = true;
+          self.svgWidth = self.$refs.container.offsetWidth * 0.75;
+          self.AnimateLoad();
         }, 300);
       });
     }

@@ -1,4 +1,4 @@
-import { shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import BarChart from "../../src/components/BarChart.vue";
 
 const barData = [
@@ -23,8 +23,13 @@ const barData = [
 describe("BarChart.vue", () => {
   it("renders props.msg when passed", () => {
     const msg = "new message";
-    const wrapper = shallowMount(BarChart, {
-      title: { msg }
+    const wrapper = mount(BarChart, {
+      propsData: {
+        title: msg,
+        "x-key": "name",
+        "y-key": "amount",
+        data: barData
+      }
     });
     expect(wrapper.text()).toMatch(msg);
   });
