@@ -4,11 +4,11 @@ A collection of modular, reusable data visualization components built using D3 a
 
 ## Usage
 
-This package is currently not published on npm and must be installed from the d3 git repository, or from a local pack. Once installed, it can be imported and used in any Vue.js app/component.
+This package is currently not published on npm and must be installed from the git repository, or from a local pack. Once installed, it can be imported and used in any Vue.js app/component.
 
 ### Dependencies
 
-Currently, this package depends on the following modules to work. These must be installed in your Vue.js application prior to using the components in the `data-vue` package. Installing the `data-vue` package should automatically install these dependencies to your project.
+Currently, this package depends on the following modules to work. Installing the `data-vue` package should automatically install these dependencies to your project.
 
 1. `d3-scale`
 2. `d3-transition`
