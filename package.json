@@ -1,6 +1,6 @@
 {
   "name": "@mitevpi/v3",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Modular, reusable D3 data visualization components for Vue.js.",
   "license": "MIT",
   "repository": "mitevpi/data-vue",
@@ -42,6 +42,7 @@
     "data"
   ],
   "dependencies": {
+    "@mitevpi/algos": "0.0.9",
     "d3-array": "^2.4.0",
     "d3-scale": "^3.2.1",
     "d3-selection": "^1.4.1",
