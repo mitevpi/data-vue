@@ -23,6 +23,8 @@ import { scaleLinear, scaleBand } from "d3-scale";
 import { selectAll } from "d3-selection";
 import { transition } from "d3-transition";
 
+import { Grow } from "../js/AnimateBar";
+
 // Animated, reactive bar chart
 export default {
   name: "BarChart",
@@ -133,20 +135,7 @@ export default {
      * Run the animation which "grows" the bar chart from the default 0 values.
      */
     AnimateLoad() {
-      selectAll(`#${this.groupId}`)
-        .selectAll("rect")
-        .data(this.data)
-        .transition()
-        .delay((d, i) => {
-          return i * 150;
-        })
-        .duration(1000)
-        .attr("y", d => {
-          return this.yScale(d[this.yKey]);
-        })
-        .attr("height", d => {
-          return this.svgHeight - this.yScale(d[this.yKey]);
-        });
+      Grow(this.groupId, this.data, this.yScale, this.yKey, this.svgHeight);
     },
     /**
      * @vuese

@@ -12,6 +12,7 @@ module.exports = {
     "eslint:recommended"
   ],
   rules: {
+    "import/prefer-default-export": "off",
     "array-callback-return": "off",
     "no-param-reassign": "off",
     "no-underscore-dangle": "off",

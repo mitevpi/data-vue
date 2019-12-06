@@ -1,7 +1,6 @@
 <template>
   <div class="svg-container" align="center">
-    <button @click="Reconfigure">Reconfigure</button>
-    <svg :id="svgId" :width="width" :height="height">
+    <svg :id="svgId" :width="width" :height="height" @click="Reconfigure">
       <g :id="groupId" />
     </svg>
   </div>
