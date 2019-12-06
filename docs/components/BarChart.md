@@ -34,6 +34,7 @@ Animated, reactive bar chart
 <!-- @vuese:BarChart:computed:start -->
 |Computed|Type|Description|From Store|
 |---|---|---|---|
+|groupId|`String`|A unique ID for the `svg`/`g` container for this chart.|No|
 |dataMax|`Number`|The maximum value in the core dataset.|No|
 |dataMin|`Number`|The minimum value in the core dataset.|No|
 |xScale|`Function`|The D3 scale function for the X axis (based on the X key).|No|

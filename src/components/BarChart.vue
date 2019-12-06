@@ -18,8 +18,8 @@
 </template>
 
 <script>
+import { ArraysObjective } from "@mitevpi/algos";
 import { scaleLinear, scaleBand } from "d3-scale";
-import { max, min } from "d3-array";
 import { selectAll } from "d3-selection";
 import { transition } from "d3-transition";
 
@@ -55,6 +55,11 @@ export default {
     redrawToggle: true
   }),
   computed: {
+    /**
+     * @vuese
+     * A unique ID for the `svg`/`g` container for this chart.
+     * @type String
+     */
     groupId() {
       return Math.random()
         .toString(36)
@@ -66,9 +71,7 @@ export default {
      * @type Number
      */
     dataMax() {
-      return max(this.data, d => {
-        return d[this.yKey];
-      });
+      return ArraysObjective.max(this.data, this.yKey);
     },
     /**
      * @vuese
@@ -76,9 +79,7 @@ export default {
      * @type Number
      */
     dataMin() {
-      return min(this.data, d => {
-        return d[this.yKey];
-      });
+      return ArraysObjective.min(this.data, this.yKey);
     },
     /**
      * @vuese
