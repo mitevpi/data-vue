@@ -6,12 +6,12 @@
       y-key="amount"
       :data="barChartData"
     />
-    <!-- <BarChart
+    <BarChart
       title="Bar Chart1"
       x-key="name"
       y-key="amount"
       :data="barChartData"
-    /> -->
+    />
   </div>
 </template>
 

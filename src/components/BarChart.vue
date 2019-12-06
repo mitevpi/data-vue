@@ -2,7 +2,7 @@
   <div ref="container" class="svg-container" align="center" :style="cssProps">
     <h1 v-show="title !== null" class="chart-title">{{ title }}</h1>
     <svg v-if="redrawToggle === true" :width="svgWidth" :height="svgHeight">
-      <g>
+      <g :id="groupId">
         <rect
           v-for="item in data"
           :key="item[xKey]"
@@ -52,9 +52,17 @@ export default {
      * @vuese
      * Whether or not to redraw the bar chart and re-run the animation (based on resize event).
      */
-    redrawToggle: true
+    redrawToggle: true,
+    /**
+     * @vuese
+     * Unique ID of this component (used for selecting items);
+     */
+    id: null
   }),
   computed: {
+    groupId() {
+      return `${String(this.id)}g`;
+    },
     /**
      * @vuese
      * The maximum value in the core dataset.
@@ -116,10 +124,14 @@ export default {
     }
   },
   mounted() {
+    this.id = this._uid;
     this.svgWidth = this.$refs.container.offsetWidth * 0.75;
     this.AddResizeListener();
     // TODO: ADD TOGGLE FOR DIFFERENT LOAD ANIMATIONS
     this.AnimateLoad();
+    // const test = selectAll("g").selectAll("rect");
+    const test = selectAll(`#${this.groupId}`);
+    console.log(test);
   },
   methods: {
     /**
@@ -149,11 +161,11 @@ export default {
       // redraw the chart 300ms after the window has been resized
       const self = this;
       window.addEventListener("resize", () => {
-        this.$data.redrawToggle = false;
+        self.redrawToggle = false;
         setTimeout(() => {
-          this.$data.redrawToggle = true;
-          this.$data.svgWidth = self.$refs.container.offsetWidth * 0.75;
-          this.AnimateLoad();
+          self.redrawToggle = true;
+          self.svgWidth = self.$refs.container.offsetWidth * 0.75;
+          self.AnimateLoad();
         }, 300);
       });
     }
