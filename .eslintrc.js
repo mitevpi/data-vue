@@ -12,6 +12,8 @@ module.exports = {
     "eslint:recommended"
   ],
   rules: {
+    "array-callback-return": "off",
+    "no-param-reassign": "off",
     "no-underscore-dangle": "off",
     "no-unused-vars": "warn",
     "no-console": "off",
