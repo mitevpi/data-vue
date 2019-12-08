@@ -17,7 +17,6 @@ export { BarChart };
 export { CirclePack };
 export { Network };
 
-
 // What should happen if the user installs the library as a plugin
 // function install(Vue) {
 //   Vue.component("BarChart", BarChart);

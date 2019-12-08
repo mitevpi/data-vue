@@ -1,6 +1,6 @@
 # V3.js (D3 + Vue Data Visualization Components)
 
-[![Generic badge](https://img.shields.io/badge/Docs-Web-Green.svg)](https://mitevpi.github.io/data-vue/) [![Generic badge](https://img.shields.io/badge/Docs-MD-Green.svg)](docs/README.md) 
+[![Generic badge](https://img.shields.io/badge/Docs-Web-Green.svg)](https://mitevpi.github.io/data-vue/) [![Generic badge](https://img.shields.io/badge/Docs-MD-Green.svg)](docs/components) 
 
 [![npm](https://img.shields.io/npm/v/@mitevpi/v3.svg)](https://www.npmjs.com/package/@mitevpi/v3) [![npm bundle size](https://img.shields.io/bundlephobia/min/@mitevpi/v3.svg)](https://bundlephobia.com/result?p=@mitevpi/v3) [![npm](https://img.shields.io/npm/dw/@mitevpi/v3.svg)](https://www.npmjs.com/package/@mitevpi/v3) [![npm2](https://img.shields.io/npm/dt/@mitevpi/v3.svg)](https://www.npmjs.com/package/@mitevpi/v3)
 
