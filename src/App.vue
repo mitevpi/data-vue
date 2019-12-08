@@ -13,8 +13,8 @@
       :data="barChartData"
     /> -->
     <CirclePack
-      :width="700"
-      :height="700"
+      :width="600"
+      :height="600"
       x-key="spaceType"
       y-key="r"
       :nodes="circlePackData"

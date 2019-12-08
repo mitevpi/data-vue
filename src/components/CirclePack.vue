@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { ArraysObjective } from "@mitevpi/algos";
+import { ArraysObjective, Strings } from "@mitevpi/algos";
 import { select, selectAll, event } from "d3-selection";
 import { drag } from "d3-drag";
 import { transition } from "d3-transition";
@@ -52,14 +52,10 @@ export default {
       return ArraysObjective.min(this.nodes, this.yKey);
     },
     groupId() {
-      return Math.random()
-        .toString(36)
-        .substring(7);
+      return Strings.removeNonAlpha(Strings.createUniqueID());
     },
     svgId() {
-      return Math.random()
-        .toString(36)
-        .substring(7);
+      return Strings.removeNonAlpha(Strings.createUniqueID());
     }
   },
   mounted() {

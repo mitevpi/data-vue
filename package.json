@@ -42,7 +42,7 @@
     "data"
   ],
   "dependencies": {
-    "@mitevpi/algos": "0.0.9",
+    "@mitevpi/algos": "0.0.10",
     "d3-array": "^2.4.0",
     "d3-drag": "1.2.5",
     "d3-force": "2.0.1",

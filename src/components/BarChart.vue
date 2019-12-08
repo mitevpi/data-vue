@@ -8,6 +8,7 @@
       @click="SortX"
     >
       <g :id="groupId">
+        <!-- <transition-group name="flip-list" tag="g"> -->
         <rect
           v-for="item in data"
           :key="item[xKey] + 'bar'"
@@ -17,6 +18,7 @@
           :width="xScale.bandwidth()"
           :height="0"
         />
+        <!-- </transition-group> -->
         <!-- <text
           v-for="item in data"
           :key="item[xKey] + 'txt'"
@@ -31,7 +33,7 @@
 </template>
 
 <script>
-import { ArraysObjective } from "@mitevpi/algos";
+import { ArraysObjective, Strings } from "@mitevpi/algos";
 import { scaleLinear, scaleBand } from "d3-scale";
 import { selectAll } from "d3-selection";
 import { transition } from "d3-transition";
@@ -76,9 +78,7 @@ export default {
      * @type String
      */
     groupId() {
-      return Math.random()
-        .toString(36)
-        .substring(7);
+      return Strings.removeNonAlpha(Strings.createUniqueID());
     },
     /**
      * @vuese
@@ -196,5 +196,9 @@ export default {
   padding-bottom: 1%;
   vertical-align: top;
   overflow: hidden;
+}
+
+.flip-list-move {
+  transition: transform 1s;
 }
 </style>
