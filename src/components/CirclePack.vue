@@ -1,8 +1,13 @@
 <template>
-  <div class="svg-container" align="center">
-    <svg :id="svgId" :width="width" :height="height" @click="Reconfigure">
+  <div align="center">
+    <container
+      ref="container"
+      :width="width"
+      :height="height"
+      :on-click="Reconfigure"
+    >
       <g :id="groupId" />
-    </svg>
+    </container>
   </div>
 </template>
 
@@ -21,8 +26,13 @@ import {
   forceY
 } from "d3-force";
 
+import Container from "./SVG/Container.vue";
+
 export default {
   name: "CirclePack",
+  components: {
+    Container
+  },
   props: {
     // The name of the property in the dataset to use for defining "identity"
     xKey: String,
@@ -72,17 +82,10 @@ export default {
      */
     groupId() {
       return Strings.removeNonAlpha(Strings.createUniqueID());
-    },
-    /**
-     * @vuese
-     * The unique identifier for the svg containing child elements created by this component.
-     * @type String
-     */
-    svgId() {
-      return Strings.removeNonAlpha(Strings.createUniqueID());
     }
   },
   mounted() {
+    // console.log(this.$refs.container.svgId);
     this.CreateSimulation();
     this.AddNodes(this.nodes);
     this.Simulate(this.nodes);
@@ -194,7 +197,7 @@ export default {
      */
     Reconfigure() {
       const self = this;
-
+      console.log(('hi'))
       this.nodes.map(node => {
         node.x = (self.width / 2) * Math.random();
         node.y = (self.height / 2) * Math.random();
@@ -217,15 +220,6 @@ export default {
 </script>
 
 <style scooped>
-.svg-container {
-  display: inline-block;
-  position: relative;
-  width: 100%;
-  padding-bottom: 1%;
-  vertical-align: top;
-  overflow: hidden;
-}
-
 .node-main {
   stroke: #3a403d;
   stroke-width: 0.5px;

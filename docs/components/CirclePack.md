@@ -35,7 +35,6 @@
 |dataMax|`Number`|The maximum value in the core dataset.|No|
 |dataMin|`Number`|The minimum value in the core dataset.|No|
 |groupId|`String`|The unique identifier for the group of svg child elements created by this component.|No|
-|svgId|`String`|The unique identifier for the svg containing child elements created by this component.|No|
 
 <!-- @vuese:CirclePack:computed:end -->
 

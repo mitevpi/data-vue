@@ -1,12 +1,12 @@
 <template>
-  <div ref="container" class="svg-container" align="center" :style="cssProps">
+  <div ref="container" align="center" :style="cssProps">
     <h1 v-show="title !== null" class="chart-title">{{ title }}</h1>
     <fade>
-      <svg
+      <container
         v-if="redrawToggle === true"
         :width="svgWidth"
         :height="svgHeight"
-        @click="SortX"
+        :on-click="SortX"
       >
         <g :id="groupId">
           <!-- <transition-group name="flip-list" tag="g"> -->
@@ -29,7 +29,7 @@
           {{ item[xKey] }}
         </text> -->
         </g>
-      </svg>
+      </container>
     </fade>
   </div>
 </template>
@@ -43,11 +43,14 @@ import Fade from "./Transitions/Fade.vue";
 
 import { Grow, SortByX } from "../js/AnimateBar";
 
+import Container from "./SVG/Container.vue";
+
 // Animated, reactive bar chart
 export default {
   name: "BarChart",
   components: {
-    Fade
+    Fade,
+    Container
   },
   props: {
     // Title of the chart
@@ -193,15 +196,6 @@ export default {
 
 .bar-positive:hover {
   fill: var(--hover-color);
-}
-
-.svg-container {
-  display: inline-block;
-  position: relative;
-  width: 100%;
-  padding-bottom: 1%;
-  vertical-align: top;
-  overflow: hidden;
 }
 
 .flip-list-move {
