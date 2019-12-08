@@ -1,31 +1,29 @@
 <template>
   <svg
+    v-if="bounds.minX"
     xmlns="http://www.w3.org/2000/svg"
     :width="width + 'px'"
     :height="height + 'px'"
     @mousemove="drag($event)"
     @mouseup="drop()"
-    v-if="bounds.minX"
   >
     <line
       v-for="link in graph.links"
-      :key="link"
+      :key="String(link.source.index) + String(link.target.index)"
       :x1="coords[link.source.index].x"
       :y1="coords[link.source.index].y"
       :x2="coords[link.target.index].x"
       :y2="coords[link.target.index].y"
-      stroke="black"
-      stroke-width="2"
+      class="node-line"
     />
 
     <circle
-      class="node-main"
       v-for="(node, i) in graph.nodes"
-      :key="i"
+      :key="i + 'circle'"
+      class="node-network"
       :cx="coords[i].x"
       :cy="coords[i].y"
       :r="20"
-      :fill="colors[Math.ceil(Math.sqrt(node.index))]"
       stroke="white"
       stroke-width="1"
       @mousedown="
@@ -60,19 +58,6 @@ export default {
       }))
     },
     padding: 20,
-    colors: [
-      "#2196F3",
-      "#E91E63",
-      "#7E57C2",
-      "#009688",
-      "#00BCD4",
-      "#EF6C00",
-      "#4CAF50",
-      "#FF9800",
-      "#F44336",
-      "#CDDC39",
-      "#9C27B0"
-    ],
     simulation: null,
     currentMove: null
   }),
@@ -148,12 +133,17 @@ export default {
   overflow: hidden;
 }
 
-.node-main {
+.node-network {
   stroke: #3a403d;
   stroke-width: 0.5px;
+  fill: cornflowerblue;
 }
 
-.node-main:hover {
+.node-network:hover {
   stroke-width: 2px;
+}
+.node-line {
+  stroke: black;
+  stroke-width: 2;
 }
 </style>
