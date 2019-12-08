@@ -1,6 +1,6 @@
 <template>
   <div class="center">
-    <BarChart
+    <bar-chart
       title="Bar Chart"
       x-key="name"
       y-key="amount"
@@ -12,13 +12,14 @@
       y-key="amount"
       :data="barChartData"
     /> -->
-    <CirclePack
+    <circle-pack
       :width="600"
       :height="600"
       x-key="spaceType"
       y-key="r"
       :nodes="circlePackData"
     />
+    <network :width="600" :height="600"></network>
   </div>
 </template>
 
@@ -29,7 +30,8 @@ export default {
   name: "App",
   components: {
     BarChart: () => import("./components/BarChart.vue"),
-    CirclePack: () => import("./components/CirclePack.vue")
+    CirclePack: () => import("./components/CirclePack.vue"),
+    Network: () => import("./components/Network.vue")
   },
   data: () => ({
     spaceTypes: ["Office", "Meeting", "Support", "Creative", "Circulation"],
