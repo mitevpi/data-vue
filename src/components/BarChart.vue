@@ -1,25 +1,26 @@
 <template>
   <div ref="container" class="svg-container" align="center" :style="cssProps">
     <h1 v-show="title !== null" class="chart-title">{{ title }}</h1>
-    <svg
-      v-if="redrawToggle === true"
-      :width="svgWidth"
-      :height="svgHeight"
-      @click="SortX"
-    >
-      <g :id="groupId">
-        <!-- <transition-group name="flip-list" tag="g"> -->
-        <rect
-          v-for="item in data"
-          :key="item[xKey] + 'bar'"
-          class="bar-positive"
-          :x="xScale(item[xKey])"
-          :y="yScale(0)"
-          :width="xScale.bandwidth()"
-          :height="0"
-        />
-        <!-- </transition-group> -->
-        <!-- <text
+    <fade>
+      <svg
+        v-if="redrawToggle === true"
+        :width="svgWidth"
+        :height="svgHeight"
+        @click="SortX"
+      >
+        <g :id="groupId">
+          <!-- <transition-group name="flip-list" tag="g"> -->
+          <rect
+            v-for="item in data"
+            :key="item[xKey] + 'bar'"
+            class="bar-positive"
+            :x="xScale(item[xKey])"
+            :y="yScale(0)"
+            :width="xScale.bandwidth()"
+            :height="0"
+          />
+          <!-- </transition-group> -->
+          <!-- <text
           v-for="item in data"
           :key="item[xKey] + 'txt'"
           :x="xScale(item[xKey])"
@@ -27,8 +28,9 @@
         >
           {{ item[xKey] }}
         </text> -->
-      </g>
-    </svg>
+        </g>
+      </svg>
+    </fade>
   </div>
 </template>
 
@@ -37,12 +39,16 @@ import { ArraysObjective, Strings } from "@mitevpi/algos";
 import { scaleLinear, scaleBand } from "d3-scale";
 import { selectAll } from "d3-selection";
 import { transition } from "d3-transition";
+import Fade from "./Transitions/Fade.vue";
 
 import { Grow, SortByX } from "../js/AnimateBar";
 
 // Animated, reactive bar chart
 export default {
   name: "BarChart",
+  components: {
+    Fade
+  },
   props: {
     // Title of the chart
     title: String,
