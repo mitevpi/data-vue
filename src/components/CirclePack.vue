@@ -24,10 +24,15 @@ import {
 export default {
   name: "CirclePack",
   props: {
+    // The name of the property in the dataset to use for defining "identity"
     xKey: String,
+    // The name of the property in the dataset to use for defining scalar amounts
     yKey: String,
+    // The desired width of the visualization
     width: Number,
+    // The desired height of the visualization
     height: Number,
+    // The array of data poitns to visualize
     nodes: Array
   },
   data: () => ({
@@ -44,15 +49,35 @@ export default {
     ])
   }),
   computed: {
+    /**
+     * @vuese
+     * The maximum value in the core dataset.
+     * @type Number
+     */
     dataMax() {
       return ArraysObjective.max(this.nodes, this.yKey);
     },
+    /**
+     * @vuese
+     * The minimum value in the core dataset.
+     * @type Number
+     */
     dataMin() {
       return ArraysObjective.min(this.nodes, this.yKey);
     },
+    /**
+     * @vuese
+     * The unique identifier for the group of svg child elements created by this component.
+     * @type String
+     */
     groupId() {
       return Strings.removeNonAlpha(Strings.createUniqueID());
     },
+    /**
+     * @vuese
+     * The unique identifier for the svg containing child elements created by this component.
+     * @type String
+     */
     svgId() {
       return Strings.removeNonAlpha(Strings.createUniqueID());
     }
@@ -63,6 +88,10 @@ export default {
     this.Simulate(this.nodes);
   },
   methods: {
+    /**
+     * @vuese
+     * Create the force simulation which will animate the component.
+     */
     CreateSimulation() {
       this.simulation = forceSimulation()
         .force(
@@ -100,6 +129,10 @@ export default {
       d.fx = null;
       d.fy = null;
     },
+    /**
+     * @vuese
+     * Add the nodes as svg circle elements to the DOM.
+     */
     AddNodes(input) {
       const self = this;
       self.node = selectAll(`#${this.groupId}`)
@@ -127,6 +160,10 @@ export default {
             .on("end", self.DragEnded)
         );
     },
+    /**
+     * @vuese
+     * Initiate the simulation animation.
+     */
     Simulate(input) {
       // let self = this;
       this.simulation
@@ -151,6 +188,10 @@ export default {
             });
         });
     },
+    /**
+     * @vuese
+     * Randomize the positions of the circles on the screen.
+     */
     Reconfigure() {
       const self = this;
 

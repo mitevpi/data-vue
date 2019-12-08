@@ -6,12 +6,6 @@
       y-key="amount"
       :data="barChartData"
     />
-    <!-- <BarChart
-      title="Bar Chart1"
-      x-key="name"
-      y-key="amount"
-      :data="barChartData"
-    /> -->
     <circle-pack
       :width="600"
       :height="600"
@@ -19,7 +13,7 @@
       y-key="r"
       :nodes="circlePackData"
     />
-    <network :width="600" :height="600"></network>
+    <network :width="600" :height="600" :graph="networkData"></network>
   </div>
 </template>
 
@@ -36,6 +30,13 @@ export default {
   data: () => ({
     spaceTypes: ["Office", "Meeting", "Support", "Creative", "Circulation"],
     circlePackData: [],
+    networkData: {
+      nodes: range(50).map(i => ({ index: i, x: null, y: null })),
+      links: range(49).map(i => ({
+        source: Math.floor(Math.sqrt(i)),
+        target: i + 1
+      }))
+    },
     barChartData: [
       {
         name: "Roses",

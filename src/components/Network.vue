@@ -34,7 +34,6 @@
 </template>
 
 <script>
-import { range } from "d3-array";
 import {
   forceSimulation,
   forceManyBody,
@@ -47,16 +46,10 @@ export default {
   name: "Network",
   props: {
     width: Number,
-    height: Number
+    height: Number,
+    graph: Object
   },
   data: () => ({
-    graph: {
-      nodes: range(50).map(i => ({ index: i, x: null, y: null })),
-      links: range(49).map(i => ({
-        source: Math.floor(Math.sqrt(i)),
-        target: i + 1
-      }))
-    },
     padding: 20,
     simulation: null,
     currentMove: null
