@@ -32,7 +32,6 @@ export default {
   },
   data: () => ({
     simulation: null,
-    nodesComputed: null,
     color: scaleOrdinal([
       "#66c2a5",
       "#fc8d62",
@@ -60,12 +59,11 @@ export default {
   },
   mounted() {
     this.CreateSimulation();
-    this.AddNodes(this.$data.nodesComputed);
-    this.Simulate(this.$data.nodesComputed);
+    this.AddNodes(this.nodes);
+    this.Simulate(this.nodes);
   },
   methods: {
     CreateSimulation() {
-      this.nodesComputed = this.nodes;
       this.simulation = forceSimulation()
         .force(
           "forceX",
@@ -156,7 +154,7 @@ export default {
     Reconfigure() {
       const self = this;
 
-      this.nodesComputed.map(node => {
+      this.nodes.map(node => {
         node.x = (self.width / 2) * Math.random();
         node.y = (self.height / 2) * Math.random();
       });
