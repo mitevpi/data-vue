@@ -2,11 +2,11 @@
   <div ref="container" align="center" :style="cssProps">
     <h1 v-show="title !== null" class="chart-title">{{ title }}</h1>
     <fade>
-      <container
+      <svg
         v-if="redrawToggle === true"
         :width="svgWidth"
         :height="svgHeight"
-        :on-click="SortX"
+        @click="SortX"
       >
         <g :id="groupId">
           <!-- <transition-group name="flip-list" tag="g"> -->
@@ -29,28 +29,23 @@
           {{ item[xKey] }}
         </text> -->
         </g>
-      </container>
+      </svg>
     </fade>
   </div>
 </template>
 
 <script>
-import { ArraysObjective, Strings } from "@mitevpi/algos";
+import { ArraysObjective, Strings, StringsLatin } from "@mitevpi/algos";
 import { scaleLinear, scaleBand } from "d3-scale";
-import { selectAll } from "d3-selection";
-import { transition } from "d3-transition";
 import Fade from "./Transitions/Fade.vue";
 
-import { Grow, SortByX } from "../js/AnimateBar";
-
-import Container from "./SVG/Container.vue";
+import { Grow, SortByX, ToggleSortByX } from "../js/AnimateBar";
 
 // Animated, reactive bar chart
 export default {
   name: "BarChart",
   components: {
-    Fade,
-    Container
+    Fade
   },
   props: {
     // Title of the chart
@@ -78,7 +73,8 @@ export default {
      * @vuese
      * Whether or not to redraw the bar chart and re-run the animation (based on resize event).
      */
-    redrawToggle: true
+    redrawToggle: true,
+    sortType: "none"
   }),
   computed: {
     /**
@@ -87,7 +83,7 @@ export default {
      * @type String
      */
     groupId() {
-      return Strings.removeNonAlpha(Strings.createUniqueID());
+      return StringsLatin.removeNonAlpha(Strings.createUniqueID());
     },
     /**
      * @vuese
@@ -160,10 +156,8 @@ export default {
       Grow(this.groupId, this.data, this.yScale, this.yKey, this.svgHeight);
     },
     SortX() {
+      this.sortType = ToggleSortByX(this.sortType, this.data, this.yKey);
       SortByX(this.groupId, this.data, this.xScale, this.xKey, this.svgHeight);
-      this.data.sort((a, b) => {
-        return a[this.yKey] - b[this.yKey];
-      });
     },
     /**
      * @vuese

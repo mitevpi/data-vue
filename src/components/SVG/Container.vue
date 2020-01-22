@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { Strings } from "@mitevpi/algos";
+import { Strings, StringsLatin } from "@mitevpi/algos";
 
 export default {
   name: "Container",
@@ -33,7 +33,7 @@ export default {
      * @type String
      */
     svgId() {
-      return Strings.removeNonAlpha(Strings.createUniqueID());
+      return StringsLatin.removeNonAlpha(Strings.createUniqueID());
     }
   }
 };

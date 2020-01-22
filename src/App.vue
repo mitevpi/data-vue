@@ -6,14 +6,14 @@
       y-key="amount"
       :data="barChartData"
     />
-    <circle-pack
-      :width="600"
-      :height="600"
-      x-key="spaceType"
-      y-key="r"
-      :nodes="circlePackData"
-    />
-    <network :width="600" :height="600" :graph="networkData"></network>
+    <!--    <circle-pack-->
+    <!--      :width="600"-->
+    <!--      :height="600"-->
+    <!--      x-key="spaceType"-->
+    <!--      y-key="r"-->
+    <!--      :nodes="circlePackData"-->
+    <!--    />-->
+    <!--    <network :width="600" :height="600" :graph="networkData"></network>-->
   </div>
 </template>
 
@@ -24,8 +24,8 @@ export default {
   name: "App",
   components: {
     BarChart: () => import("./components/BarChart.vue"),
-    CirclePack: () => import("./components/CirclePack.vue"),
-    Network: () => import("./components/Network.vue")
+    // CirclePack: () => import("./components/CirclePack.vue"),
+    // Network: () => import("./components/Network.vue")
   },
   data: () => ({
     spaceTypes: ["Office", "Meeting", "Support", "Creative", "Circulation"],

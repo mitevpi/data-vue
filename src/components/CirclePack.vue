@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { ArraysObjective, Strings } from "@mitevpi/algos";
+import { ArraysObjective, Strings, StringsLatin } from "@mitevpi/algos";
 import { select, selectAll, event } from "d3-selection";
 import { drag } from "d3-drag";
 import { transition } from "d3-transition";
@@ -81,7 +81,7 @@ export default {
      * @type String
      */
     groupId() {
-      return Strings.removeNonAlpha(Strings.createUniqueID());
+      return StringsLatin.removeNonAlpha(Strings.createUniqueID());
     }
   },
   mounted() {
