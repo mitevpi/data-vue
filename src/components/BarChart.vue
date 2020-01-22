@@ -20,14 +20,15 @@
             :height="0"
           />
           <!-- </transition-group> -->
-          <!-- <text
-          v-for="item in data"
-          :key="item[xKey] + 'txt'"
-          :x="xScale(item[xKey])"
-          :y="yScale(item[yKey])"
-        >
-          {{ item[xKey] }}
-        </text> -->
+          <text
+            v-for="item in data"
+            :key="item[xKey] + 'txt'"
+            :x="xScale(item[xKey])"
+            :y="yScale(0)"
+            class="chart-labels"
+          >
+            {{ item[xKey] }}
+          </text>
         </g>
       </svg>
     </fade>
@@ -39,7 +40,8 @@ import { ArraysObjective, Strings, StringsLatin } from "@mitevpi/algos";
 import { scaleLinear, scaleBand } from "d3-scale";
 import Fade from "./Transitions/Fade.vue";
 
-import { Grow, SortByX, ToggleSortByX } from "../js/AnimateBar";
+import { GrowAll } from "../js/AnimateBarLoad";
+import { SortAll, ToggleSortByX } from "../js/AnimateBarSort";
 
 // Animated, reactive bar chart
 export default {
@@ -145,18 +147,11 @@ export default {
     this.svgWidth = this.$refs.container.offsetWidth * 0.75;
     this.AddResizeListener();
     // TODO: ADD TOGGLE FOR DIFFERENT LOAD ANIMATIONS
-    this.AnimateLoad();
+    GrowAll(this.groupId, this.data, this.yScale, this.yKey, this.svgHeight);
   },
   methods: {
-    /**
-     * @vuese
-     * Run the animation which "grows" the bar chart from the default 0 values.
-     */
-    AnimateLoad() {
-      Grow(this.groupId, this.data, this.yScale, this.yKey, this.svgHeight);
-    },
     SortX() {
-      SortByX(this.groupId, this.data, this.xScale, this.xKey, this.svgHeight);
+      SortAll(this.groupId, this.data, this.xScale, this.xKey, this.svgHeight);
       this.sortType = ToggleSortByX(this.sortType, this.data, this.yKey);
     },
     /**
@@ -170,8 +165,14 @@ export default {
         self.redrawToggle = false;
         setTimeout(() => {
           self.redrawToggle = true;
-          self.svgWidth = self.$refs.container.offsetWidth * 0.75;
-          self.AnimateLoad();
+          self.svgWidth = self.$refs.container.offsetWidth * 0.85;
+          GrowAll(
+            this.groupId,
+            this.data,
+            this.yScale,
+            this.yKey,
+            this.svgHeight
+          );
         }, 300);
       });
     }
@@ -181,6 +182,11 @@ export default {
 
 <style scoped>
 .chart-title {
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+}
+.chart-labels {
+  margin-bottom: 10px;
+  padding-top: 10px;
   font-family: "Open Sans", Helvetica, Arial, sans-serif;
 }
 

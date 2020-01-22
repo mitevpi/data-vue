@@ -1,41 +1,16 @@
 import { selectAll } from "d3-selection";
-import { transition } from "d3-transition";
 
-export function Grow(
-  groupId,
-  data,
-  yScale,
-  yKey,
-  svgHeight,
-  duration = 1000,
-  delay = 150
-) {
-  selectAll(`#${groupId}`)
-    .selectAll("rect")
-    .data(data)
-    .transition()
-    .delay((d, i) => {
-      return i * delay;
-    })
-    .duration(duration)
-    .attr("y", d => {
-      return yScale(d[yKey]);
-    })
-    .attr("height", d => {
-      return svgHeight - yScale(d[yKey]);
-    });
-}
-
-export function SortByX(
+function SortByX(
   groupId,
   data,
   xScale,
   xKey,
   duration = 1000,
-  delay = 150
+  delay = 150,
+  selection
 ) {
   selectAll(`#${groupId}`)
-    .selectAll("rect")
+    .selectAll(selection)
     .data(data)
     .transition()
     .delay((d, i) => {
@@ -45,6 +20,39 @@ export function SortByX(
     .attr("x", d => {
       return xScale(d[xKey]);
     });
+}
+
+export function SortBars(
+  groupId,
+  data,
+  xScale,
+  xKey,
+  duration = 1000,
+  delay = 150
+) {
+  SortByX(groupId, data, xScale, xKey, duration, delay, "rect");
+}
+
+export function SortLabels(
+  groupId,
+  data,
+  xScale,
+  xKey,
+  duration = 1000,
+  delay = 150
+) {
+  SortByX(groupId, data, xScale, xKey, duration, delay, "text");
+}
+export function SortAll(
+  groupId,
+  data,
+  xScale,
+  xKey,
+  duration = 1000,
+  delay = 150
+) {
+  SortByX(groupId, data, xScale, xKey, duration, delay, "rect");
+  SortByX(groupId, data, xScale, xKey, duration, delay, "text");
 }
 
 /**
