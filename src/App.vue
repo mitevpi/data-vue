@@ -18,25 +18,18 @@
 </template>
 
 <script>
-import { range } from "d3-array";
+import { PackData, NetworkData } from "./js/CreateData";
 
 export default {
   name: "App",
   components: {
     BarChart: () => import("./components/BarChart.vue"),
-    // CirclePack: () => import("./components/CirclePack.vue"),
+    // CirclePack: () => import("./components/CirclePack.vue")
     // Network: () => import("./components/Network.vue")
   },
   data: () => ({
-    spaceTypes: ["Office", "Meeting", "Support", "Creative", "Circulation"],
     circlePackData: [],
-    networkData: {
-      nodes: range(50).map(i => ({ index: i, x: null, y: null })),
-      links: range(49).map(i => ({
-        source: Math.floor(Math.sqrt(i)),
-        target: i + 1
-      }))
-    },
+    networkData: [],
     barChartData: [
       {
         name: "Roses",
@@ -57,21 +50,10 @@ export default {
     ]
   }),
   mounted() {
-    this.CreatePackData();
+    this.circlePackData = PackData();
+    this.networkData = NetworkData();
   },
-  methods: {
-    CreatePackData() {
-      const r = () => Math.random();
-      this.circlePackData = range(200).map(i => {
-        const randomNumber = Math.floor(r() * this.spaceTypes.length);
-        return {
-          r: r() * 14 * r() * 2 * r() * 2,
-          id: i,
-          spaceType: this.spaceTypes[randomNumber]
-        };
-      });
-    }
-  }
+  methods: {}
 };
 </script>
 

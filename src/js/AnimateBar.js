@@ -34,12 +34,6 @@ export function SortByX(
   duration = 1000,
   delay = 150
 ) {
-  xScale.domain(
-    data.map(d => {
-      return d[xKey];
-    })
-  );
-
   selectAll(`#${groupId}`)
     .selectAll("rect")
     .data(data)

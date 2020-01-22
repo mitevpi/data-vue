@@ -156,8 +156,8 @@ export default {
       Grow(this.groupId, this.data, this.yScale, this.yKey, this.svgHeight);
     },
     SortX() {
-      this.sortType = ToggleSortByX(this.sortType, this.data, this.yKey);
       SortByX(this.groupId, this.data, this.xScale, this.xKey, this.svgHeight);
+      this.sortType = ToggleSortByX(this.sortType, this.data, this.yKey);
     },
     /**
      * @vuese
