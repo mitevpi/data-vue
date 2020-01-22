@@ -197,7 +197,7 @@ export default {
      */
     Reconfigure() {
       const self = this;
-      console.log(('hi'))
+      console.log("hi");
       this.nodes.map(node => {
         node.x = (self.width / 2) * Math.random();
         node.y = (self.height / 2) * Math.random();

@@ -23,7 +23,6 @@ Animated, reactive bar chart
 <!-- @vuese:BarChart:methods:start -->
 |Method|Description|Parameters|
 |---|---|---|
-|AnimateLoad|Run the animation which "grows" the bar chart from the default 0 values.|-|
 |AddResizeListener|Add a listener to udpate and redraw the chart after X seconds of a resize event.|-|
 
 <!-- @vuese:BarChart:methods:end -->

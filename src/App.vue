@@ -23,7 +23,7 @@ import { PackData, NetworkData } from "./js/CreateData";
 export default {
   name: "App",
   components: {
-    BarChart: () => import("./components/BarChart.vue"),
+    BarChart: () => import("./components/BarChart.vue")
     // CirclePack: () => import("./components/CirclePack.vue")
     // Network: () => import("./components/Network.vue")
   },
