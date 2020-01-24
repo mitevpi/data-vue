@@ -41,6 +41,7 @@ Animated, reactive bar chart
 |xScale|`Function`|The D3 scale function for the X axis (based on the X key).|No|
 |yScale|`Function`|The D3 scale function for the Y axis (based on the Y key).|No|
 |svgHeight|`Number`|The computed height of the SVG container, based on the overall width.|No|
+|sortTransition|`String`|Whether or not to activate the sort transition animation (if active on render, it will conflict with the "grow" animation.|No|
 
 <!-- @vuese:BarChart:computed:end -->
 

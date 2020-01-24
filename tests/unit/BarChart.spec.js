@@ -21,16 +21,51 @@ const barData = [
 ];
 
 describe("BarChart.vue", () => {
+  const wrapperSlim = mount(BarChart, {
+    propsData: {
+      title: "Bar Chart",
+      "x-key": "name",
+      "y-key": "amount",
+      data: barData
+    }
+  });
+
+  const wrapperFull = mount(BarChart, {
+    propsData: {
+      title: "Bar Chart",
+      "x-key": "name",
+      "y-key": "amount",
+      data: barData,
+      "top-labels": true,
+      "bottom-labels": true
+    }
+  });
+
+  it("has a mounted hook", () => {
+    expect(typeof BarChart.mounted).toBe("function");
+  });
+
+  it("renders bars with the bar-positive class", () => {
+    expect(wrapperSlim.findAll(".bar-positive").length).toEqual(4);
+  });
+
+  it("renders top labels on prompt", () => {
+    expect(wrapperFull.findAll(".bar-label-top").length).toEqual(4);
+  });
+
+  it("renders bottom labels on prompt", () => {
+    expect(wrapperFull.findAll(".bar-label-top").length).toEqual(4);
+  });
+
+  it("doesn't render bottom labels by default", () => {
+    expect(wrapperSlim.findAll(".bar-label-top").length).toBe(0);
+  });
+
+  it("doesn't render top labels by default", () => {
+    expect(wrapperSlim.findAll(".bar-label-top").length).toBe(0);
+  });
+
   it("renders title when passed via prop", () => {
-    const msg = "new message";
-    const wrapper = mount(BarChart, {
-      propsData: {
-        title: msg,
-        "x-key": "name",
-        "y-key": "amount",
-        data: barData
-      }
-    });
-    expect(wrapper.text()).toMatch(msg);
+    expect(wrapperSlim.text()).toMatch("Bar Chart");
   });
 });

@@ -11,6 +11,9 @@
 [![GitHub issues](https://img.shields.io/github/issues/mitevpi/data-vue.svg)](https://github.com/mitevpi/data-vue/issues) ![David](https://img.shields.io/david/dev/mitevpi/data-vue.svg)
 [![GitHub last commit](https://img.shields.io/github/last-commit/mitevpi/data-vue.svg)](https://github.com/mitevpi/data-vue/commits/master)
 
+![Azure DevOps builds](https://img.shields.io/azure-devops/build/pmitevpi/pmitevpi/3)
+![Azure DevOps Tests](https://img.shields.io/azure-devops/tests/pmitevpi/pmitevpi/3)
+
 A collection of modular, reusable data visualization components built using D3 and Vue.js: `v3`.
 
 ## Usage
