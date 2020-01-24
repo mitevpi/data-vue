@@ -165,14 +165,36 @@ export default {
     svgHeight() {
       return this.svgWidth / 1.61803398875; // golden ratio
     },
+    /**
+     * @vuese
+     * Whether or not to activate the sort transition animation (if active on render,
+     * it will conflict with the "grow" animation.
+     * @type String
+     */
     sortTransition() {
       return this.animate ? "flip-list" : "disabled-list";
+    },
+    dataCount() {
+      return this.data.length;
     },
     cssProps() {
       return {
         "--bar-color": this.barColor || "steelblue",
         "--hover-color": this.hoverColor || "orange"
       };
+    }
+  },
+  watch: {
+    dataCount() {
+      setTimeout(() => {
+        GrowAll(
+          this.groupId,
+          this.data,
+          this.yScale,
+          this.yKey,
+          this.svgHeight
+        );
+      }, 10);
     }
   },
   mounted() {
@@ -187,7 +209,6 @@ export default {
   methods: {
     SortX() {
       this.sortType = ToggleSortByX(this.sortType, this.data, this.yKey);
-      // SortAll(this.groupId, this.data, this.xScale, this.xKey, this.svgHeight);
     },
     /**
      * @vuese
@@ -236,6 +257,14 @@ export default {
   &-move {
     transition: transform 0.5s ease-in-out;
     transition-delay: calc(0.15s * var(--i));
+  }
+  &-enter-active,
+  -leave-active {
+    transition: opacity 2s;
+  }
+  &-enter,
+  -leave-to {
+    opacity: 0;
   }
 }
 </style>

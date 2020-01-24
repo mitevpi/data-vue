@@ -46,7 +46,7 @@ export default {
         amount: 15
       },
       {
-        name: "Narcissuses",
+        name: "Willows",
         amount: 9
       }
     ]
@@ -54,6 +54,9 @@ export default {
   mounted() {
     this.circlePackData = PackData();
     this.networkData = NetworkData();
+    setTimeout(() => {
+      this.barChartData.push({ name: "New", amount: 19 });
+    }, 2000);
   },
   methods: {}
 };

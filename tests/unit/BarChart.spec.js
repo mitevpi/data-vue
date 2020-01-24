@@ -21,7 +21,7 @@ const barData = [
 ];
 
 describe("BarChart.vue", () => {
-  it("renders props.msg when passed", () => {
+  it("renders title when passed via prop", () => {
     const msg = "new message";
     const wrapper = mount(BarChart, {
       propsData: {
