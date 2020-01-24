@@ -12,6 +12,7 @@ module.exports = {
     "eslint:recommended"
   ],
   rules: {
+    "vue/no-unused-vars": "warn",
     "import/prefer-default-export": "off",
     "array-callback-return": "off",
     "no-param-reassign": "off",

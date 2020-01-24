@@ -37,5 +37,15 @@ export function GrowAll(
   delay = 150
 ) {
   Grow(groupId, "rect", data, yScale, yKey, svgHeight, duration, delay);
-  Grow(groupId, ".bar-label-top", data, yScale, yKey, svgHeight, duration, delay, 5);
+  Grow(
+    groupId,
+    ".bar-label-top",
+    data,
+    yScale,
+    yKey,
+    svgHeight,
+    duration,
+    delay,
+    5
+  );
 }

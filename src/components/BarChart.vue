@@ -10,44 +10,47 @@
       >
         <!--TODO: Figure out better logic for not cutting off labels-->
         <g :id="groupId" transform="translate(0,20)">
-          <!--          <transition-group name="flip-list" tag="g">-->
-          <rect
-            v-for="item in data"
-            :key="item[xKey] + 'bar'"
-            class="bar-positive"
-            :x="xScale(item[xKey])"
-            :y="yScale(0)"
-            :width="xScale.bandwidth()"
-            :height="0"
-          />
-          <!--          </transition-group>-->
-          <g v-if="topLabels">
-            <!--            <transition-group name="flip-list" tag="g">-->
-            <text
-              v-for="item in data"
-              :key="item[xKey] + 'top'"
-              :x="xScale(item[xKey]) + xScale.bandwidth() / 2 - 10"
+          <transition-group :name="sortTransition" tag="g">
+            <rect
+              v-for="(item, i) in data"
+              :key="item[xKey] + 'bar'"
+              :x="xScale(item[xKey])"
               :y="yScale(0)"
-              class="bar-label-top"
-            >
-              {{ item[yKey] }}
-            </text>
-            <!--            </transition-group>-->
+              :width="xScale.bandwidth()"
+              :height="0"
+              :style="{ '--i': i }"
+              class="bar-positive"
+            />
+          </transition-group>
+          <g v-if="topLabels">
+            <transition-group :name="sortTransition" tag="g">
+              <text
+                v-for="(item, i) in data"
+                :key="item[xKey] + 'top'"
+                :x="xScale(item[xKey]) + xScale.bandwidth() / 2 - 10"
+                :y="yScale(0)"
+                class="bar-label-top"
+                :style="{ '--i': i }"
+              >
+                {{ item[yKey] }}
+              </text>
+            </transition-group>
           </g>
 
           <fade>
             <g v-if="bottomLabels">
-              <!--              <transition-group name="flip-list" tag="g">-->
-              <text
-                v-for="item in data"
-                :key="item[xKey] + 'bottom'"
-                :x="xScale(item[xKey])"
-                :y="yScale(0) + 20"
-                class="bar-label-bottom"
-              >
-                {{ item[xKey] }}
-              </text>
-              <!--              </transition-group>-->
+              <transition-group :name="sortTransition" tag="g">
+                <text
+                  v-for="(item, i) in data"
+                  :key="item[xKey] + 'bottom'"
+                  :x="xScale(item[xKey])"
+                  :y="yScale(0) + 20"
+                  class="bar-label-bottom"
+                  :style="{ '--i': i }"
+                >
+                  {{ item[xKey] }}
+                </text>
+              </transition-group>
             </g>
           </fade>
         </g>
@@ -62,7 +65,7 @@ import { scaleLinear, scaleBand } from "d3-scale";
 import Fade from "./Transitions/Fade.vue";
 
 import { GrowAll } from "../js/AnimateBarLoad";
-import {DummySortAll, SortAll, ToggleSortByX} from "../js/AnimateBarSort";
+import { ToggleSortByX } from "../js/AnimateBarSort";
 
 // Animated, reactive bar chart
 export default {
@@ -101,7 +104,8 @@ export default {
      * Whether or not to redraw the bar chart and re-run the animation (based on resize event).
      */
     redrawToggle: true,
-    sortType: "none"
+    sortType: "none",
+    animate: false
   }),
   computed: {
     /**
@@ -161,6 +165,9 @@ export default {
     svgHeight() {
       return this.svgWidth / 1.61803398875; // golden ratio
     },
+    sortTransition() {
+      return this.animate ? "flip-list" : "disabled-list";
+    },
     cssProps() {
       return {
         "--bar-color": this.barColor || "steelblue",
@@ -173,18 +180,14 @@ export default {
     this.AddResizeListener();
     // TODO: ADD TOGGLE FOR DIFFERENT LOAD ANIMATIONS
     GrowAll(this.groupId, this.data, this.yScale, this.yKey, this.svgHeight);
-    // TODO: FIX HACKY ANIMATION FIX FOR SORT
-    // when D3's sort is applied, X and Height props change drastically from the ones
-    // initially assigned by vue upon content render
-    // setTimeout(() => {
-    //   this.sortType = ToggleSortByX(this.sortType, this.data, this.yKey);
-    //   DummySortAll(this.groupId, this.data, this.xScale, this.xKey, this.svgHeight);
-    // }, 1100);
+    setTimeout(() => {
+      this.animate = true;
+    }, 1100);
   },
   methods: {
     SortX() {
       this.sortType = ToggleSortByX(this.sortType, this.data, this.yKey);
-      SortAll(this.groupId, this.data, this.xScale, this.xKey, this.svgHeight);
+      // SortAll(this.groupId, this.data, this.xScale, this.xKey, this.svgHeight);
     },
     /**
      * @vuese
@@ -212,7 +215,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .chart-title {
 }
 .bar-label-top {
@@ -220,14 +223,19 @@ export default {
 .bar-label-bottom {
 }
 .bar-positive {
+  /*transition-duration: 0.3s;*/
   fill: var(--bar-color);
 }
 
 .bar-positive:hover {
+  /*transition-duration: 0.3s;*/
   fill: var(--hover-color);
 }
 
-.flip-list-move {
-  transition: transform 1s;
+.flip-list {
+  &-move {
+    transition: transform 0.5s ease-in-out;
+    transition-delay: calc(0.15s * var(--i));
+  }
 }
 </style>

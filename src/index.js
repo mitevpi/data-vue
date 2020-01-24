@@ -1,4 +1,4 @@
-// import Vue from "vue";
+import Vue from "vue";
 import BarChart from "./components/BarChart.vue";
 import CirclePack from "./components/CirclePack.vue";
 import Network from "./components/Network.vue";

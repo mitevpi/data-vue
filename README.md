@@ -1,10 +1,15 @@
 # V3.js (D3 + Vue Data Visualization Components)
 
-[![Generic badge](https://img.shields.io/badge/Docs-Web-Green.svg)](https://mitevpi.github.io/data-vue/) [![Generic badge](https://img.shields.io/badge/Docs-MD-Green.svg)](docs/components) 
+[![Generic badge](https://img.shields.io/badge/Docs-Web-Green.svg)](https://mitevpi.github.io/data-vue/)
+[![Generic badge](https://img.shields.io/badge/Docs-MD-Green.svg)](docs/components)
+[![Generic badge](https://img.shields.io/badge/Demo-CodeSandbox-Green.svg)](http://bit.ly/v3js-demo)
 
-[![npm](https://img.shields.io/npm/v/@mitevpi/v3.svg)](https://www.npmjs.com/package/@mitevpi/v3) [![npm bundle size](https://img.shields.io/bundlephobia/min/@mitevpi/v3.svg)](https://bundlephobia.com/result?p=@mitevpi/v3) [![npm](https://img.shields.io/npm/dw/@mitevpi/v3.svg)](https://www.npmjs.com/package/@mitevpi/v3) [![npm2](https://img.shields.io/npm/dt/@mitevpi/v3.svg)](https://www.npmjs.com/package/@mitevpi/v3)
+[![npm](https://img.shields.io/npm/v/@mitevpi/v3.svg)](https://www.npmjs.com/package/@mitevpi/v3) [![npm bundle size](https://img.shields.io/bundlephobia/min/@mitevpi/v3.svg)](https://bundlephobia.com/result?p=@mitevpi/v3)
+[![npm](https://img.shields.io/npm/dw/@mitevpi/v3.svg)](https://www.npmjs.com/package/@mitevpi/v3)
+[![npm2](https://img.shields.io/npm/dt/@mitevpi/v3.svg)](https://www.npmjs.com/package/@mitevpi/v3)
 
-[![GitHub issues](https://img.shields.io/github/issues/mitevpi/data-vue.svg)](https://github.com/mitevpi/data-vue/issues) ![David](https://img.shields.io/david/dev/mitevpi/data-vue.svg) [![GitHub last commit](https://img.shields.io/github/last-commit/mitevpi/data-vue.svg)](https://github.com/mitevpi/data-vue/commits/master)
+[![GitHub issues](https://img.shields.io/github/issues/mitevpi/data-vue.svg)](https://github.com/mitevpi/data-vue/issues) ![David](https://img.shields.io/david/dev/mitevpi/data-vue.svg)
+[![GitHub last commit](https://img.shields.io/github/last-commit/mitevpi/data-vue.svg)](https://github.com/mitevpi/data-vue/commits/master)
 
 A collection of modular, reusable data visualization components built using D3 and Vue.js: `v3`.
 
@@ -15,15 +20,6 @@ To use this module, install locally using the command below, or clone this repos
 ```cmd
 npm i @mitevpi/v3
 ```
-
-### Dependencies
-
-Currently, this package depends on the following modules to work. These must be installed in your Vue.js application prior to using the components in the `v3` package. Installing the `v3` package should automatically install these dependencies to your project.
-
-1. `d3-scale`
-2. `d3-transition`
-3. `d3-array`
-4. `d3-selection`
 
 ### Importing
 

@@ -14,6 +14,8 @@ Animated, reactive bar chart
 |animation|(Optional) What kind of animation to apply to the chart|`String`|`false`|-|
 |barColor|(Optional) The default color to apply on the bars|`String`|`false`|-|
 |hoverColor|(Optional) The color to apply on the bars when hovered over|`String`|`false`|-|
+|topLabels|(Optional) Whether or not to have labels at the top of each bar|`Boolean`|`false`|-|
+|bottomLabels|(Optional) Whether or not to have labels at the bottom of each bar|`Boolean`|`false`|-|
 
 <!-- @vuese:BarChart:props:end -->
 
@@ -23,7 +25,7 @@ Animated, reactive bar chart
 <!-- @vuese:BarChart:methods:start -->
 |Method|Description|Parameters|
 |---|---|---|
-|AddResizeListener|Add a listener to udpate and redraw the chart after X seconds of a resize event.|-|
+|AddResizeListener|Add a listener to update and redraw the chart after X seconds of a resize event.|-|
 
 <!-- @vuese:BarChart:methods:end -->
 
