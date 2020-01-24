@@ -26,30 +26,6 @@ function Grow(
       return svgHeight - yScale(d[yKey]);
     });
 }
-
-export function GrowBars(
-  groupId,
-  data,
-  yScale,
-  yKey,
-  svgHeight,
-  duration = 1000,
-  delay = 150
-) {
-  Grow(groupId, data, yScale, yKey, svgHeight, duration, delay, "rect");
-}
-
-export function GrowLabels(
-  groupId,
-  data,
-  yScale,
-  yKey,
-  svgHeight,
-  duration = 1000,
-  delay = 150
-) {
-  Grow(groupId, data, yScale, yKey, svgHeight, duration, delay, ".bar-label-top");
-}
 export function GrowAll(
   groupId,
   data,
@@ -59,6 +35,6 @@ export function GrowAll(
   duration = 1000,
   delay = 150
 ) {
-  GrowBars(groupId, data, yScale, yKey, svgHeight, duration, delay);
-  GrowLabels(groupId, data, yScale, yKey, svgHeight, duration, delay);
+  Grow(groupId, data, yScale, yKey, svgHeight, duration, delay, "rect");
+  Grow(groupId, data, yScale, yKey, svgHeight, duration, delay, ".bar-label-top");
 }

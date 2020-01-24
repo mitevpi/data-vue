@@ -25,27 +25,6 @@ function SortByX(
     });
 }
 
-export function SortBars(
-  groupId,
-  data,
-  xScale,
-  xKey,
-  duration = 1000,
-  delay = 150
-) {
-  SortByX(groupId, "rect", data, xScale, xKey, duration, delay);
-}
-
-export function SortLabels(
-  groupId,
-  data,
-  xScale,
-  xKey,
-  duration = 1000,
-  delay = 150
-) {
-  SortByX(groupId, "text", data, xScale, xKey, duration, delay, true);
-}
 export function SortAll(
   groupId,
   data,
@@ -54,8 +33,9 @@ export function SortAll(
   duration = 1000,
   delay = 150
 ) {
-  SortBars(groupId, data, xScale, xKey, duration, delay);
-  SortLabels(groupId, data, xScale, xKey, duration, delay);
+  SortByX(groupId, "rect", data, xScale, xKey, duration, delay);
+  SortByX(groupId, ".bar-label-top", data, xScale, xKey, duration, delay, true);
+  SortByX(groupId, ".bar-label-bottom", data, xScale, xKey, duration, delay);
 }
 
 /**

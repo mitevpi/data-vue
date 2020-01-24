@@ -5,7 +5,7 @@
       <svg
         v-if="redrawToggle === true"
         :width="svgWidth"
-        :height="svgHeight * 1.1"
+        :height="svgHeight * 1.25"
         @click="SortX"
       >
         <!--TODO: Figure out better logic for not cutting off labels-->
@@ -24,12 +24,24 @@
           <g v-if="topLabels">
             <text
               v-for="item in data"
-              :key="item[xKey] + 'txt'"
+              :key="item[xKey] + 'top'"
               :x="xScale(item[xKey]) + xScale.bandwidth() / 2 - 10"
               :y="yScale(0)"
               class="bar-label-top"
             >
               {{ item[yKey] }}
+            </text>
+          </g>
+
+          <g v-if="bottomLabels">
+            <text
+              v-for="item in data"
+              :key="item[xKey] + 'bottom'"
+              :x="xScale(item[xKey])"
+              :y="yScale(0) + 20"
+              class="bar-label-bottom"
+            >
+              {{ item[xKey] }}
             </text>
           </g>
         </g>
@@ -189,12 +201,11 @@ export default {
 
 <style scoped>
 .chart-title {
-  font-family: "Open Sans", Helvetica, Arial, sans-serif;
 }
 .bar-label-top {
-  font-family: "Open Sans", Helvetica, Arial, sans-serif;
 }
-
+.bar-label-bottom {
+}
 .bar-positive {
   fill: var(--bar-color);
 }

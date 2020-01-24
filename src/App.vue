@@ -1,11 +1,12 @@
 <template>
-  <div class="center">
+  <div class="center global-font">
     <bar-chart
       title="Bar Chart"
       x-key="name"
       y-key="amount"
       :data="barChartData"
       :top-labels="true"
+      :bottom-labels="true"
     />
     <!--    <circle-pack-->
     <!--      :width="600"-->
@@ -64,5 +65,8 @@ export default {
   width: 50%;
   /* border: 3px solid green; */
   padding: 10px;
+}
+.global-font {
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
 }
 </style>
