@@ -1,6 +1,6 @@
 {
   "name": "@mitevpi/v3",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "Modular, reusable D3 data visualization components for Vue.js.",
   "license": "MIT",
   "repository": "mitevpi/data-vue",
