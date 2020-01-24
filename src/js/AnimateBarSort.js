@@ -2,12 +2,13 @@ import { selectAll } from "d3-selection";
 
 function SortByX(
   groupId,
+  selection,
   data,
   xScale,
   xKey,
   duration = 1000,
   delay = 150,
-  selection
+  centered = false
 ) {
   selectAll(`#${groupId}`)
     .selectAll(selection)
@@ -18,7 +19,9 @@ function SortByX(
     })
     .duration(duration)
     .attr("x", d => {
-      return xScale(d[xKey]);
+      return centered
+        ? xScale(d[xKey]) + xScale.bandwidth() / 2 - xScale.padding() * 100
+        : xScale(d[xKey]);
     });
 }
 
@@ -30,7 +33,7 @@ export function SortBars(
   duration = 1000,
   delay = 150
 ) {
-  SortByX(groupId, data, xScale, xKey, duration, delay, "rect");
+  SortByX(groupId, "rect", data, xScale, xKey, duration, delay);
 }
 
 export function SortLabels(
@@ -41,7 +44,7 @@ export function SortLabels(
   duration = 1000,
   delay = 150
 ) {
-  SortByX(groupId, data, xScale, xKey, duration, delay, "text");
+  SortByX(groupId, "text", data, xScale, xKey, duration, delay, true);
 }
 export function SortAll(
   groupId,
@@ -51,8 +54,8 @@ export function SortAll(
   duration = 1000,
   delay = 150
 ) {
-  SortByX(groupId, data, xScale, xKey, duration, delay, "rect");
-  SortByX(groupId, data, xScale, xKey, duration, delay, "text");
+  SortBars(groupId, data, xScale, xKey, duration, delay);
+  SortLabels(groupId, data, xScale, xKey, duration, delay);
 }
 
 /**

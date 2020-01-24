@@ -48,7 +48,7 @@ export function GrowLabels(
   duration = 1000,
   delay = 150
 ) {
-  Grow(groupId, data, yScale, yKey, svgHeight, duration, delay, "text");
+  Grow(groupId, data, yScale, yKey, svgHeight, duration, delay, ".bar-label-top");
 }
 export function GrowAll(
   groupId,

@@ -5,10 +5,11 @@
       <svg
         v-if="redrawToggle === true"
         :width="svgWidth"
-        :height="svgHeight"
+        :height="svgHeight * 1.1"
         @click="SortX"
       >
-        <g :id="groupId">
+        <!--TODO: Figure out better logic for not cutting off labels-->
+        <g :id="groupId" transform="translate(0,20)">
           <!-- <transition-group name="flip-list" tag="g"> -->
           <rect
             v-for="item in data"
@@ -20,15 +21,17 @@
             :height="0"
           />
           <!-- </transition-group> -->
-          <text
-            v-for="item in data"
-            :key="item[xKey] + 'txt'"
-            :x="xScale(item[xKey])"
-            :y="yScale(0)"
-            class="chart-labels"
-          >
-            {{ item[xKey] }}
-          </text>
+          <g v-if="topLabels">
+            <text
+              v-for="item in data"
+              :key="item[xKey] + 'txt'"
+              :x="xScale(item[xKey]) + xScale.bandwidth() / 2 - 10"
+              :y="yScale(0)"
+              class="bar-label-top"
+            >
+              {{ item[yKey] }}
+            </text>
+          </g>
         </g>
       </svg>
     </fade>
@@ -63,7 +66,11 @@ export default {
     // (Optional) The default color to apply on the bars
     barColor: String,
     // (Optional) The color to apply on the bars when hovered over
-    hoverColor: String
+    hoverColor: String,
+    // (Optional) Whether or not to have labels at the top of each bar
+    topLabels: Boolean,
+    // (Optional) Whether or not to have labels at the bottom of each bar
+    bottomLabels: Boolean
   },
   data: () => ({
     /**
@@ -184,9 +191,7 @@ export default {
 .chart-title {
   font-family: "Open Sans", Helvetica, Arial, sans-serif;
 }
-.chart-labels {
-  margin-bottom: 10px;
-  padding-top: 10px;
+.bar-label-top {
   font-family: "Open Sans", Helvetica, Arial, sans-serif;
 }
 

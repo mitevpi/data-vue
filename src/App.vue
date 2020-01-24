@@ -5,6 +5,7 @@
       x-key="name"
       y-key="amount"
       :data="barChartData"
+      :top-labels="true"
     />
     <!--    <circle-pack-->
     <!--      :width="600"-->
