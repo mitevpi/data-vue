@@ -10,6 +10,7 @@ function SortByX(
   delay = 150,
   centered = false
 ) {
+  // console.log(data);
   selectAll(`#${groupId}`)
     .selectAll(selection)
     .data(data)
@@ -36,6 +37,12 @@ export function SortAll(
   SortByX(groupId, "rect", data, xScale, xKey, duration, delay);
   SortByX(groupId, ".bar-label-top", data, xScale, xKey, duration, delay, true);
   SortByX(groupId, ".bar-label-bottom", data, xScale, xKey, duration, delay);
+}
+
+export function DummySortAll(groupId, data, xScale, xKey) {
+  SortByX(groupId, "rect", data, xScale, xKey, 0, 0);
+  SortByX(groupId, ".bar-label-top", data, xScale, xKey, 0, 0, true);
+  SortByX(groupId, ".bar-label-bottom", data, xScale, xKey, 0, 0);
 }
 
 /**

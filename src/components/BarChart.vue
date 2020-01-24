@@ -10,7 +10,7 @@
       >
         <!--TODO: Figure out better logic for not cutting off labels-->
         <g :id="groupId" transform="translate(0,20)">
-          <!-- <transition-group name="flip-list" tag="g"> -->
+          <!--          <transition-group name="flip-list" tag="g">-->
           <rect
             v-for="item in data"
             :key="item[xKey] + 'bar'"
@@ -20,8 +20,9 @@
             :width="xScale.bandwidth()"
             :height="0"
           />
-          <!-- </transition-group> -->
+          <!--          </transition-group>-->
           <g v-if="topLabels">
+            <!--            <transition-group name="flip-list" tag="g">-->
             <text
               v-for="item in data"
               :key="item[xKey] + 'top'"
@@ -31,19 +32,24 @@
             >
               {{ item[yKey] }}
             </text>
+            <!--            </transition-group>-->
           </g>
 
-          <g v-if="bottomLabels">
-            <text
-              v-for="item in data"
-              :key="item[xKey] + 'bottom'"
-              :x="xScale(item[xKey])"
-              :y="yScale(0) + 20"
-              class="bar-label-bottom"
-            >
-              {{ item[xKey] }}
-            </text>
-          </g>
+          <fade>
+            <g v-if="bottomLabels">
+              <!--              <transition-group name="flip-list" tag="g">-->
+              <text
+                v-for="item in data"
+                :key="item[xKey] + 'bottom'"
+                :x="xScale(item[xKey])"
+                :y="yScale(0) + 20"
+                class="bar-label-bottom"
+              >
+                {{ item[xKey] }}
+              </text>
+              <!--              </transition-group>-->
+            </g>
+          </fade>
         </g>
       </svg>
     </fade>
@@ -56,7 +62,7 @@ import { scaleLinear, scaleBand } from "d3-scale";
 import Fade from "./Transitions/Fade.vue";
 
 import { GrowAll } from "../js/AnimateBarLoad";
-import { SortAll, ToggleSortByX } from "../js/AnimateBarSort";
+import {DummySortAll, SortAll, ToggleSortByX} from "../js/AnimateBarSort";
 
 // Animated, reactive bar chart
 export default {
@@ -167,15 +173,22 @@ export default {
     this.AddResizeListener();
     // TODO: ADD TOGGLE FOR DIFFERENT LOAD ANIMATIONS
     GrowAll(this.groupId, this.data, this.yScale, this.yKey, this.svgHeight);
+    // TODO: FIX HACKY ANIMATION FIX FOR SORT
+    // when D3's sort is applied, X and Height props change drastically from the ones
+    // initially assigned by vue upon content render
+    // setTimeout(() => {
+    //   this.sortType = ToggleSortByX(this.sortType, this.data, this.yKey);
+    //   DummySortAll(this.groupId, this.data, this.xScale, this.xKey, this.svgHeight);
+    // }, 1100);
   },
   methods: {
     SortX() {
-      SortAll(this.groupId, this.data, this.xScale, this.xKey, this.svgHeight);
       this.sortType = ToggleSortByX(this.sortType, this.data, this.yKey);
+      SortAll(this.groupId, this.data, this.xScale, this.xKey, this.svgHeight);
     },
     /**
      * @vuese
-     * Add a listener to udpate and redraw the chart after X seconds of a resize event.
+     * Add a listener to update and redraw the chart after X seconds of a resize event.
      */
     AddResizeListener() {
       // redraw the chart 300ms after the window has been resized
