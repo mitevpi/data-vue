@@ -14,7 +14,8 @@
 ![Azure DevOps builds](https://img.shields.io/azure-devops/build/pmitevpi/pmitevpi/3)
 ![Azure DevOps Tests](https://img.shields.io/azure-devops/tests/pmitevpi/pmitevpi/3)
 
-A collection of modular, reusable data visualization components built using D3 and Vue.js: `v3`.
+A collection of modular, reusable data visualization components built
+using D3 and Vue.js: `v3.js`.
 
 ## Usage
 

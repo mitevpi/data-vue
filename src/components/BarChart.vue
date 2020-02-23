@@ -259,11 +259,11 @@ export default {
     transition-delay: calc(0.15s * var(--i));
   }
   &-enter-active,
-  -leave-active {
+  &-leave-active {
     transition: opacity 2s;
   }
   &-enter,
-  -leave-to {
+  &-leave-to {
     opacity: 0;
   }
 }
