@@ -16,7 +16,7 @@
         :y1="coords[link.source.index].y"
         :x2="coords[link.target.index].x"
         :y2="coords[link.target.index].y"
-        class="node-line"
+        class="network-link"
       />
     </g>
 
@@ -24,7 +24,7 @@
       <circle
         v-for="(node, i) in graph.nodes"
         :key="i + 'circle'"
-        class="node-network"
+        class="network-node"
         :cx="coords[i].x"
         :cy="coords[i].y"
         :r="node[yKey]"
@@ -35,14 +35,16 @@
         "
       />
     </g>
-    <g v-if="nodeLabels">
+    <g v-if="nodeLabels" class="noselect">
       <text
         v-for="(node, i) in graph.nodes"
         :key="i + 'circle-label'"
         :x="coords[i].x"
         :y="coords[i].y"
+        text-anchor="middle"
+        alignment-baseline="middle"
       >
-        {{ node[yKey] }}
+        {{ node[xKey] }}
       </text>
     </g>
   </svg>
@@ -54,20 +56,35 @@ import {
   forceManyBody,
   forceLink,
   forceX,
-  forceY
+  forceY,
+  forceCollide
 } from "d3-force";
-import { ArraysObjective, Strings, StringsLatin } from "@mitevpi/algos";
+import { ArraysObjective } from "@mitevpi/algos";
 
 export default {
   name: "Network",
   props: {
     width: Number,
     height: Number,
+    // The array of data objects to visualize
     graph: Object,
+    // The name of the property in the dataset to define node scaling
     yKey: String,
-    // (Optional) The default color to apply on the nodes in the network
+    // The name of the property in the dataset to define node identity
+    xKey: String,
+    // (Optional) The color to apply on the nodes in the network
     nodeColor: String,
-    // (Optional) The color to apply on the links between nodes in the network
+    // (Optional) The color to apply on the nodes in the network when hovered over
+    nodeColorHover: String,
+    // (Optional) The stroke width to apply on the nodes in the network
+    nodeStrokeSize: Number,
+    // (Optional) The stroke width to apply on the nodes in the network when hovered over
+    nodeStrokeSizeHover: Number,
+    // (Optional) The stroke color to apply on the nodes in the network
+    nodeStrokeColor: Number,
+    // (Optional) The stroke width to apply to the links between nodes in the network
+    lineSize: Number,
+    // (Optional) The stroke color to apply to the links between nodes in the network
     lineColor: String,
     // (Optional) Whether or not to have labels on each node
     nodeLabels: Boolean
@@ -89,7 +106,12 @@ export default {
     cssProps() {
       return {
         "--node-color": this.nodeColor || "cornflowerblue",
-        "--line-color": this.lineColor || "black"
+        "--node-color-hover": this.nodeColorHover || this.nodeColor,
+        "--node-stroke-size": this.nodeStrokeSize || 0.5,
+        "--node-stroke-size-hover": this.nodeStrokeSizeHover || 2,
+        "--node-stroke-color": this.nodeStrokeColor || "black",
+        "--line-color": this.lineColor || "black",
+        "--line-size": this.lineSize || 2
       };
     },
     /**
@@ -131,6 +153,14 @@ export default {
         "charge",
         forceManyBody().strength(d => -100)
       )
+      .force(
+        "collide",
+        forceCollide()
+          .strength(0.1)
+          .radius(d => {
+            return d[this.yKey];
+          })
+      )
       .force("link", forceLink(this.graph.links))
       .force("x", forceX())
       .force("y", forceY());
@@ -164,17 +194,20 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.node-network {
-  stroke: #3a403d;
-  stroke-width: 0.5px;
+@import "../css/globals.scss";
+
+.network-node {
+  stroke: var(--node-stroke-color);
+  stroke-width: var(--node-stroke-size);
   fill: var(--node-color);
 }
 
-.node-network:hover {
-  stroke-width: 2px;
+.network-node:hover {
+  stroke-width: var(--node-stroke-size-hover);
+  fill: var(--node-color-hover);
 }
-.node-line {
+.network-link {
   stroke: var(--line-color);
-  stroke-width: 2;
+  stroke-width: var(--line-size);
 }
 </style>

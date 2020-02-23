@@ -23,6 +23,7 @@
       line-color="gray"
       :node-labels="true"
       y-key="size"
+      x-key="size"
     />
   </div>
 </template>
