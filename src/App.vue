@@ -1,13 +1,13 @@
 <template>
   <div class="center global-font">
-    <bar-chart
-      title="Bar Chart"
-      x-key="name"
-      y-key="amount"
-      :data="barChartData"
-      :top-labels="true"
-      :bottom-labels="true"
-    />
+    <!--    <bar-chart-->
+    <!--      title="Bar Chart"-->
+    <!--      x-key="name"-->
+    <!--      y-key="amount"-->
+    <!--      :data="barChartData"-->
+    <!--      :top-labels="true"-->
+    <!--      :bottom-labels="true"-->
+    <!--    />-->
     <!--    <circle-pack-->
     <!--      :width="600"-->
     <!--      :height="600"-->
@@ -15,19 +15,27 @@
     <!--      y-key="r"-->
     <!--      :nodes="circlePackData"-->
     <!--    />-->
-    <!--    <network :width="600" :height="600" :graph="networkData"></network>-->
+    <network
+      :width="600"
+      :height="600"
+      :graph="networkData"
+      node-color="lightgray"
+      line-color="gray"
+      :node-labels="true"
+      y-key="size"
+    />
   </div>
 </template>
 
 <script>
-import { PackData, NetworkData } from "./js/CreateData";
+import { PackData, NetworkData, NetworkData2 } from "./js/CreateData";
 
 export default {
   name: "App",
   components: {
-    BarChart: () => import("./components/BarChart.vue")
+    // BarChart: () => import("./components/BarChart.vue"),
     // CirclePack: () => import("./components/CirclePack.vue")
-    // Network: () => import("./components/Network.vue")
+    Network: () => import("./components/Network.vue")
   },
   data: () => ({
     circlePackData: [],
@@ -52,6 +60,8 @@ export default {
     ]
   }),
   mounted() {
+    // console.log(NetworkData2());
+    // console.log(NetworkData());
     this.circlePackData = PackData();
     this.networkData = NetworkData();
     setTimeout(() => {

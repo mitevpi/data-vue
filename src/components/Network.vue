@@ -4,32 +4,47 @@
     xmlns="http://www.w3.org/2000/svg"
     :width="width + 'px'"
     :height="height + 'px'"
+    :style="cssProps"
     @mousemove="drag($event)"
     @mouseup="drop()"
   >
-    <line
-      v-for="link in graph.links"
-      :key="String(link.source.index) + String(link.target.index)"
-      :x1="coords[link.source.index].x"
-      :y1="coords[link.source.index].y"
-      :x2="coords[link.target.index].x"
-      :y2="coords[link.target.index].y"
-      class="node-line"
-    />
+    <g>
+      <line
+        v-for="link in graph.links"
+        :key="String(link.source.index) + String(link.target.index)"
+        :x1="coords[link.source.index].x"
+        :y1="coords[link.source.index].y"
+        :x2="coords[link.target.index].x"
+        :y2="coords[link.target.index].y"
+        class="node-line"
+      />
+    </g>
 
-    <circle
-      v-for="(node, i) in graph.nodes"
-      :key="i + 'circle'"
-      class="node-network"
-      :cx="coords[i].x"
-      :cy="coords[i].y"
-      :r="20"
-      stroke="white"
-      stroke-width="1"
-      @mousedown="
-        currentMove = { x: $event.screenX, y: $event.screenY, node: node }
-      "
-    />
+    <g>
+      <circle
+        v-for="(node, i) in graph.nodes"
+        :key="i + 'circle'"
+        class="node-network"
+        :cx="coords[i].x"
+        :cy="coords[i].y"
+        :r="node[yKey]"
+        stroke="white"
+        stroke-width="1"
+        @mousedown="
+          currentMove = { x: $event.screenX, y: $event.screenY, node: node }
+        "
+      />
+    </g>
+    <g v-if="nodeLabels">
+      <text
+        v-for="(node, i) in graph.nodes"
+        :key="i + 'circle-label'"
+        :x="coords[i].x"
+        :y="coords[i].y"
+      >
+        {{ node[yKey] }}
+      </text>
+    </g>
   </svg>
 </template>
 
@@ -41,16 +56,24 @@ import {
   forceX,
   forceY
 } from "d3-force";
+import { ArraysObjective, Strings, StringsLatin } from "@mitevpi/algos";
 
 export default {
   name: "Network",
   props: {
     width: Number,
     height: Number,
-    graph: Object
+    graph: Object,
+    yKey: String,
+    // (Optional) The default color to apply on the nodes in the network
+    nodeColor: String,
+    // (Optional) The color to apply on the links between nodes in the network
+    lineColor: String,
+    // (Optional) Whether or not to have labels on each node
+    nodeLabels: Boolean
   },
   data: () => ({
-    padding: 20,
+    padding: 5,
     simulation: null,
     currentMove: null
   }),
@@ -63,16 +86,40 @@ export default {
         maxY: Math.max(...this.graph.nodes.map(n => n.y))
       };
     },
+    cssProps() {
+      return {
+        "--node-color": this.nodeColor || "cornflowerblue",
+        "--line-color": this.lineColor || "black"
+      };
+    },
+    /**
+     * @vuese
+     * The maximum value in the core dataset.
+     * @type Number
+     */
+    dataMax() {
+      return ArraysObjective.max(this.graph.nodes, this.yKey);
+    },
+    /**
+     * @vuese
+     * The minimum value in the core dataset.
+     * @type Number
+     */
+    dataMin() {
+      return ArraysObjective.min(this.graph.nodes, this.yKey);
+    },
     coords() {
       return this.graph.nodes.map(node => {
+        // set padding per node, to ensure that nodes don't get clipped due to size
+        const truePadding = node[this.yKey] + this.padding;
         return {
           x:
-            this.padding +
-            ((node.x - this.bounds.minX) * (this.width - 2 * this.padding)) /
+            truePadding +
+            ((node.x - this.bounds.minX) * (this.width - 2 * truePadding)) /
               (this.bounds.maxX - this.bounds.minX),
           y:
-            this.padding +
-            ((node.y - this.bounds.minY) * (this.height - 2 * this.padding)) /
+            truePadding +
+            ((node.y - this.bounds.minY) * (this.height - 2 * truePadding)) /
               (this.bounds.maxY - this.bounds.minY)
         };
       });
@@ -116,27 +163,18 @@ export default {
 };
 </script>
 
-<style scooped>
-.svg-container {
-  display: inline-block;
-  position: relative;
-  width: 100%;
-  padding-bottom: 1%;
-  vertical-align: top;
-  overflow: hidden;
-}
-
+<style scoped lang="scss">
 .node-network {
   stroke: #3a403d;
   stroke-width: 0.5px;
-  fill: cornflowerblue;
+  fill: var(--node-color);
 }
 
 .node-network:hover {
   stroke-width: 2px;
 }
 .node-line {
-  stroke: black;
+  stroke: var(--line-color);
   stroke-width: 2;
 }
 </style>
