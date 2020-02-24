@@ -114,22 +114,6 @@ export default {
         "--line-size": this.lineSize || 2
       };
     },
-    /**
-     * @vuese
-     * The maximum value in the core dataset.
-     * @type Number
-     */
-    dataMax() {
-      return ArraysObjective.max(this.graph.nodes, this.yKey);
-    },
-    /**
-     * @vuese
-     * The minimum value in the core dataset.
-     * @type Number
-     */
-    dataMin() {
-      return ArraysObjective.min(this.graph.nodes, this.yKey);
-    },
     coords() {
       return this.graph.nodes.map(node => {
         // set padding per node, to ensure that nodes don't get clipped due to size
@@ -148,6 +132,11 @@ export default {
     }
   },
   created() {
+    // this.graph.nodes.map(node => {
+    //   node.x = null;
+    //   node.y = null;
+    // });
+    console.log(this.graph.nodes);
     this.simulation = forceSimulation(this.graph.nodes)
       .force(
         "charge",

@@ -61,6 +61,11 @@ export default {
       }
     ]
   }),
+  // computed: {
+  //   networkComputed() {
+  //     return NetworkData();
+  //   }
+  // },
   mounted() {
     this.circlePackData = MockData.packData(200);
     console.log(NetworkData());

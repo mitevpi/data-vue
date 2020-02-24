@@ -219,7 +219,7 @@ export default {
 };
 </script>
 
-<style scooped>
+<style scoped>
 .node-main {
   stroke: #3a403d;
   stroke-width: 0.5px;
