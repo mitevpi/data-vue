@@ -29,7 +29,8 @@
 </template>
 
 <script>
-import { PackData, NetworkData } from "./js/CreateData";
+import { MockData } from "@mitevpi/algos";
+import { NetworkData } from "./js/CreateData";
 
 export default {
   name: "App",
@@ -61,9 +62,9 @@ export default {
     ]
   }),
   mounted() {
-    // console.log(NetworkData2());
-    // console.log(NetworkData());
-    this.circlePackData = PackData();
+    this.circlePackData = MockData.packData(200);
+    console.log(NetworkData());
+    console.log(MockData.networkData(50));
     this.networkData = NetworkData();
     setTimeout(() => {
       this.barChartData.push({ name: "New", amount: 19 });
