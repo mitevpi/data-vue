@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { PackData, NetworkData, NetworkData2 } from "./js/CreateData";
+import { PackData, NetworkData } from "./js/CreateData";
 
 export default {
   name: "App",

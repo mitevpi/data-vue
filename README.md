@@ -19,7 +19,9 @@ using D3 and Vue.js: `v3.js`.
 
 ## Usage
 
-To use this module, install locally using the command below, or clone this repository and import the .vue files directly from source. Full documentation can be found on the [GitHub Pages Site](https://mitevpi.github.io/data-vue/) for this project.
+To use this module, install locally using the command below, or clone this repository and import the .vue files
+directly from source. Full documentation can be found on the [GitHub Pages Site](https://mitevpi.github.io/data-vue/)
+for this project. Example usages and component demos can be found on [CodeSandbox](http://bit.ly/v3js-demo).
 
 ```cmd
 npm i @mitevpi/v3
@@ -43,7 +45,6 @@ export default {
     BarChart
   }
 };
-</script>
 ```
 
 Chunked import using the source `.vue` file.
@@ -56,12 +57,13 @@ export default {
     BarChart: () => import("@mitevpi/v3/src/components/BarChart"),
   }
 };
-</script>
 ```
 
 #### Global
 
-Importing the single file `.vue` components directly. (If using Vue CLI 3 with Babel or TypeScript, it's recommended that you import its src directory. This will minimize the size of your application by preventing duplicate or unnecessary polyfills.)
+Importing the single file `.vue` components directly. (If using Vue CLI 3 with Babel or TypeScript, it's recommended
+that you import its src directory. This will minimize the size of your application by preventing duplicate or
+unnecessary polyfills.)
 
 Importing source `.vue` file.
 
@@ -74,6 +76,7 @@ Vue.use(BarChart);
 Importing the bundled `.js`.
 
 ```js
+// main.js
 import BarChart from "@mitevpi/v3";
 Vue.use(BarChart);
 ```
