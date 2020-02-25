@@ -12,10 +12,10 @@
       <line
         v-for="link in graph.links"
         :key="String(link.source.index) + String(link.target.index)"
-        :x1="coords[link.source.index].x"
-        :y1="coords[link.source.index].y"
-        :x2="coords[link.target.index].x"
-        :y2="coords[link.target.index].y"
+        :x1="computeX(link.source)"
+        :y1="computeY(link.source)"
+        :x2="computeX(link.target)"
+        :y2="computeY(link.target)"
         class="network-link"
       />
     </g>
@@ -25,8 +25,8 @@
         v-for="(node, i) in graph.nodes"
         :key="i + 'circle'"
         class="network-node"
-        :cx="coords[i].x"
-        :cy="coords[i].y"
+        :cx="computeX(node)"
+        :cy="computeY(node)"
         :r="node[yKey]"
         stroke="white"
         stroke-width="1"
@@ -39,8 +39,8 @@
       <text
         v-for="(node, i) in graph.nodes"
         :key="i + 'circle-label'"
-        :x="coords[i].x"
-        :y="coords[i].y"
+        :x="computeX(node)"
+        :y="computeY(node)"
         text-anchor="middle"
         alignment-baseline="middle"
       >
@@ -59,7 +59,6 @@ import {
   forceY,
   forceCollide
 } from "d3-force";
-import { ArraysObjective } from "@mitevpi/algos";
 
 export default {
   name: "Network",
@@ -113,22 +112,6 @@ export default {
         "--line-color": this.lineColor || "black",
         "--line-size": this.lineSize || 2
       };
-    },
-    coords() {
-      return this.graph.nodes.map(node => {
-        // set padding per node, to ensure that nodes don't get clipped due to size
-        const truePadding = node[this.yKey] + this.padding;
-        return {
-          x:
-            truePadding +
-            ((node.x - this.bounds.minX) * (this.width - 2 * truePadding)) /
-              (this.bounds.maxX - this.bounds.minX),
-          y:
-            truePadding +
-            ((node.y - this.bounds.minY) * (this.height - 2 * truePadding)) /
-              (this.bounds.maxY - this.bounds.minY)
-        };
-      });
     }
   },
   created() {
@@ -136,7 +119,7 @@ export default {
     //   node.x = null;
     //   node.y = null;
     // });
-    console.log(this.graph.nodes);
+    // console.log(this.graph.nodes);
     this.simulation = forceSimulation(this.graph.nodes)
       .force(
         "charge",
@@ -177,6 +160,25 @@ export default {
       this.currentMove = null;
       this.simulation.alpha(1);
       this.simulation.restart();
+    },
+    computeTruePadding(node) {
+      return node[this.yKey] + this.padding;
+    },
+    computeX(node) {
+      const truePadding = this.computeTruePadding(node);
+      return (
+        truePadding +
+        ((node.x - this.bounds.minX) * (this.width - 2 * truePadding)) /
+          (this.bounds.maxX - this.bounds.minX)
+      );
+    },
+    computeY(node) {
+      const truePadding = this.computeTruePadding(node);
+      return (
+        truePadding +
+        ((node.y - this.bounds.minY) * (this.height - 2 * truePadding)) /
+          (this.bounds.maxY - this.bounds.minY)
+      );
     }
   }
 };

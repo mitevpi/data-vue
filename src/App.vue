@@ -65,7 +65,6 @@ export default {
     const netData = MockData.networkData(50);
     netData.nodes.map(node => {
       node.x = null;
-      node.y = null;
     });
     this.networkData = netData;
     setTimeout(() => {
