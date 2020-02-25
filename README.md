@@ -17,6 +17,11 @@
 A collection of modular, reusable data visualization components built
 using D3 and Vue.js: `v3.js`.
 
+<p float="left">
+    <img src="https://i.imgur.com/IkjDubm.png" alt="Network Graph" width="300"/>
+    <img src="https://i.imgur.com/4C4luhb.png" alt="Bar Chart" width="300"/>
+</p>
+
 ## Usage
 
 To use this module, install locally using the command below, or clone this repository and import the .vue files
@@ -83,7 +88,8 @@ Vue.use(BarChart);
 
 ## Documentation
 
-Documentation can be found in the [docs](/docs) folder.
+Full documentation can be found on the [GitHub Pages Site](https://mitevpi.github.io/data-vue/)
+for this project. Example usages and component demos can be found on [CodeSandbox](http://bit.ly/v3js-demo).
 
 ## Developer Documentation
 

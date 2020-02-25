@@ -14,8 +14,7 @@ describe("Network.vue", () => {
       width: 600,
       height: 600,
       graph: netData,
-      "y-key": "size",
-      "x-key": "size"
+      "node-size-key": "size"
     }
   });
 
@@ -24,11 +23,10 @@ describe("Network.vue", () => {
       width: 600,
       height: 600,
       graph: netData,
-      "y-key": "size",
-      "x-key": "size",
+      "node-size-key": "size",
       "node-color": "lightgray",
-      "line-color": "gray",
-      "node-labels": true
+      "link-color": "gray",
+      "node-label-key": "size"
     }
   });
 

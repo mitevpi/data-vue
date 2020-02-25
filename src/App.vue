@@ -20,10 +20,9 @@
       :height="600"
       :graph="networkData"
       node-color="lightgray"
-      line-color="gray"
-      :node-labels="true"
-      y-key="size"
-      x-key="size"
+      link-color="gray"
+      node-label-key="size"
+      node-size-key="size"
     />
   </div>
 </template>

@@ -27,7 +27,7 @@
         class="network-node"
         :cx="computeX(node)"
         :cy="computeY(node)"
-        :r="node[yKey]"
+        :r="node[nodeSizeKey]"
         stroke="white"
         stroke-width="1"
         @mousedown="
@@ -35,7 +35,7 @@
         "
       />
     </g>
-    <g v-if="nodeLabels" class="noselect">
+    <g v-if="nodeLabelKey" class="noselect">
       <text
         v-for="(node, i) in graph.nodes"
         :key="i + 'circle-label'"
@@ -45,7 +45,7 @@
         alignment-baseline="middle"
         class="network-node-label"
       >
-        {{ node[xKey] }}
+        {{ node[nodeLabelKey] }}
       </text>
     </g>
   </svg>
@@ -69,9 +69,9 @@ export default {
     // The array of data objects to visualize
     graph: Object,
     // The name of the property in the dataset to define node scaling
-    yKey: String,
-    // The name of the property in the dataset to define node identity
-    xKey: String,
+    nodeSizeKey: String,
+    // (Optional) The name of the property in the dataset to use as a node label
+    nodeLabelKey: String,
     // (Optional) The color to apply on the nodes in the network
     nodeColor: String,
     // (Optional) The color to apply on the nodes in the network when hovered over
@@ -83,11 +83,9 @@ export default {
     // (Optional) The stroke color to apply on the nodes in the network
     nodeStrokeColor: Number,
     // (Optional) The stroke width to apply to the links between nodes in the network
-    lineSize: Number,
+    linkSize: Number,
     // (Optional) The stroke color to apply to the links between nodes in the network
-    lineColor: String,
-    // (Optional) Whether or not to have labels on each node
-    nodeLabels: Boolean
+    linkColor: String
   },
   data: () => ({
     padding: 5,
@@ -110,16 +108,12 @@ export default {
         "--node-stroke-size": this.nodeStrokeSize || 0.5,
         "--node-stroke-size-hover": this.nodeStrokeSizeHover || 2,
         "--node-stroke-color": this.nodeStrokeColor || "black",
-        "--line-color": this.lineColor || "black",
-        "--line-size": this.lineSize || 2
+        "--link-color": this.linkColor || "black",
+        "--link-size": this.linkSize || 2
       };
     }
   },
   created() {
-    // this.graph.nodes.map(node => {
-    //   node.x = null;
-    // });
-    // console.log(this.graph.nodes);
     this.simulation = forceSimulation(this.graph.nodes)
       .force(
         "charge",
@@ -130,7 +124,7 @@ export default {
         forceCollide()
           .strength(0.05)
           .radius(d => {
-            return d[this.yKey];
+            return d[this.nodeSizeKey];
           })
       )
       .force("link", forceLink(this.graph.links))
@@ -162,7 +156,7 @@ export default {
       this.simulation.restart();
     },
     computeTruePadding(node) {
-      return node[this.yKey] + this.padding;
+      return node[this.nodeSizeKey] + this.padding;
     },
     computeX(node) {
       const truePadding = this.computeTruePadding(node);
@@ -201,7 +195,7 @@ export default {
   fill: var(--node-color-hover);
 }
 .network-link {
-  stroke: var(--line-color);
-  stroke-width: var(--line-size);
+  stroke: var(--link-color);
+  stroke-width: var(--link-size);
 }
 </style>
