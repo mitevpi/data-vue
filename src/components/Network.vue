@@ -43,6 +43,7 @@
         :y="computeY(node)"
         text-anchor="middle"
         alignment-baseline="middle"
+        class="network-node-label"
       >
         {{ node[xKey] }}
       </text>
@@ -117,7 +118,6 @@ export default {
   created() {
     // this.graph.nodes.map(node => {
     //   node.x = null;
-    //   node.y = null;
     // });
     // console.log(this.graph.nodes);
     this.simulation = forceSimulation(this.graph.nodes)
@@ -128,7 +128,7 @@ export default {
       .force(
         "collide",
         forceCollide()
-          .strength(0.1)
+          .strength(0.05)
           .radius(d => {
             return d[this.yKey];
           })
@@ -191,6 +191,9 @@ export default {
   stroke: var(--node-stroke-color);
   stroke-width: var(--node-stroke-size);
   fill: var(--node-color);
+}
+
+.network-node-label {
 }
 
 .network-node:hover {
