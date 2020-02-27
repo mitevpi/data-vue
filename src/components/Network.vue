@@ -149,8 +149,6 @@ export default {
       }
     },
     drop() {
-      delete this.currentMove.node.fx;
-      delete this.currentMove.node.fy;
       this.currentMove = null;
       this.simulation.alpha(1);
       this.simulation.restart();
