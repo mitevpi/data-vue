@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import Vue from "vue";
 import BarChart from "./components/BarChart.vue";
 import CirclePack from "./components/CirclePack.vue";
