@@ -10,23 +10,23 @@
   >
     <g>
       <line
-        v-for="link in graph.links"
+        v-for="link in graphComputed.links"
         :key="String(link.source.index) + String(link.target.index)"
-        :x1="computeX(link.source)"
-        :y1="computeY(link.source)"
-        :x2="computeX(link.target)"
-        :y2="computeY(link.target)"
+        :x1="link.source.cx"
+        :y1="link.source.cy"
+        :x2="link.target.cx"
+        :y2="link.target.cy"
         class="network-link"
       />
     </g>
 
     <g>
       <circle
-        v-for="(node, i) in graph.nodes"
+        v-for="(node, i) in graphComputed.nodes"
         :key="i + 'circle'"
         class="network-node"
-        :cx="computeX(node)"
-        :cy="computeY(node)"
+        :cx="node.cx"
+        :cy="node.cy"
         :r="node[nodeSizeKey]"
         stroke="white"
         stroke-width="1"
@@ -37,10 +37,10 @@
     </g>
     <g v-if="nodeLabelKey" class="noselect">
       <text
-        v-for="(node, i) in graph.nodes"
+        v-for="(node, i) in graphComputed.nodes"
         :key="i + 'circle-label'"
-        :x="computeX(node)"
-        :y="computeY(node)"
+        :x="node.cx"
+        :y="node.cy"
         text-anchor="middle"
         alignment-baseline="middle"
         class="network-node-label"
@@ -111,6 +111,13 @@ export default {
         "--link-color": this.linkColor || "black",
         "--link-size": this.linkSize || 2
       };
+    },
+    graphComputed() {
+      this.graph.nodes.map(node => {
+        node.cx = this.computeX(node);
+        node.cy = this.computeY(node);
+      });
+      return this.graph;
     }
   },
   created() {
