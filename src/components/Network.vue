@@ -30,7 +30,7 @@
         :cy="node.cy"
         :r="networkNodes.ComputeSize(node)"
         stroke="white"
-        stroke-width="1"
+        :stroke-width="networkNodes.ComputeStrokeSize(node)"
         @mousedown="
           currentMove = { x: $event.screenX, y: $event.screenY, node: node }
         "
@@ -64,7 +64,6 @@ import {
 import { NetworkNodes } from "../js/NetworkNodes";
 import { NetworkLinks } from "../js/NetworkLinks";
 
-
 export default {
   name: "Network",
   props: {
@@ -74,7 +73,7 @@ export default {
     height: Number,
     // The array of data objects to visualize
     graph: Object,
-    // (Optional) The name of the property in the dataset to define node scaling
+    // (Optional) The name of the property in the dataset to define node scaling, or a static number
     nodeSize: String,
     // (Optional) The name of the property in the dataset to use as a node label
     nodeLabelKey: String,
@@ -83,7 +82,7 @@ export default {
     // (Optional) The color to apply on the nodes in the network when hovered over
     nodeColorHover: String,
     // (Optional) The stroke width to apply on the nodes in the network
-    nodeStrokeSize: Number,
+    nodeStrokeSize: String,
     // (Optional) The stroke width to apply on the nodes in the network when hovered over
     nodeStrokeSizeHover: Number,
     // (Optional) The stroke color to apply on the nodes in the network
@@ -112,14 +111,18 @@ export default {
       return {
         "--node-color": this.nodeColor || "cornflowerblue",
         "--node-color-hover": this.nodeColorHover || this.nodeColor,
-        "--node-stroke-size": this.nodeStrokeSize || 0.5,
         "--node-stroke-size-hover": this.nodeStrokeSizeHover || 2,
         "--node-stroke-color": this.nodeStrokeColor || "black",
         "--link-color": this.linkColor || "black"
       };
     },
     networkNodes() {
-      return new NetworkNodes(this.nodeSize, this.padding, this.bounds);
+      return new NetworkNodes(
+        this.nodeSize,
+        this.nodeStrokeSize,
+        this.padding,
+        this.bounds
+      );
     },
     graphComputed() {
       this.graph.nodes.map(node => {
@@ -182,7 +185,7 @@ export default {
 
 .network-node {
   stroke: var(--node-stroke-color);
-  stroke-width: var(--node-stroke-size);
+  // stroke-width: var(--node-stroke-size);
   fill: var(--node-color);
 }
 

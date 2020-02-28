@@ -1,12 +1,19 @@
 export class NetworkNodes {
-  constructor(nodeSizeKey, padding, bounds) {
+  constructor(nodeSizeKey, nodeStrokeSizeKey, padding, bounds) {
     this.nodeSizeKey = nodeSizeKey;
+    this.nodeStrokeSizeKey = nodeStrokeSizeKey;
     this.padding = padding;
     this.bounds = bounds;
   }
 
   ComputeTruePadding(node) {
     return this.ComputeSize(node) + this.padding;
+  }
+
+  ComputeProperty(dataset, key, alternative) {
+    if (Object.prototype.hasOwnProperty.call(dataset, key)) return dataset[key];
+    if (!Number.isNaN(key)) return +key;
+    return alternative;
   }
 
   ComputeX(node, width) {
@@ -28,9 +35,10 @@ export class NetworkNodes {
   }
 
   ComputeSize(node) {
-    if (Object.prototype.hasOwnProperty.call(node, this.nodeSizeKey))
-      return node[this.nodeSizeKey];
-    if (!Number.isNaN(this.nodeSizeKey)) return +this.nodeSizeKey;
-    return 20;
+    return this.ComputeProperty(node, this.nodeSizeKey, 20);
+  }
+
+  ComputeStrokeSize(node) {
+    return this.ComputeProperty(node, this.nodeStrokeSizeKey, 0.5);
   }
 }
