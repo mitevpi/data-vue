@@ -27,7 +27,7 @@
         class="network-node"
         :cx="node.cx"
         :cy="node.cy"
-        :r="node[nodeSizeKey]"
+        :r="networkNodes.ComputeSize(node)"
         stroke="white"
         stroke-width="1"
         @mousedown="
@@ -60,15 +60,18 @@ import {
   forceY,
   forceCollide
 } from "d3-force";
+import { NetworkNodes } from "../js/NetworkNodes";
 
 export default {
   name: "Network",
   props: {
+    // Chart width
     width: Number,
+    // Chart height
     height: Number,
     // The array of data objects to visualize
     graph: Object,
-    // The name of the property in the dataset to define node scaling
+    // (Optional) The name of the property in the dataset to define node scaling
     nodeSizeKey: String,
     // (Optional) The name of the property in the dataset to use as a node label
     nodeLabelKey: String,
@@ -112,10 +115,13 @@ export default {
         "--link-size": this.linkSize || 2
       };
     },
+    networkNodes() {
+      return new NetworkNodes(this.nodeSizeKey, this.padding, this.bounds);
+    },
     graphComputed() {
       this.graph.nodes.map(node => {
-        node.cx = this.computeX(node);
-        node.cy = this.computeY(node);
+        node.cx = this.networkNodes.ComputeX(node, this.width);
+        node.cy = this.networkNodes.ComputeY(node, this.height);
       });
       return this.graph;
     }
@@ -130,8 +136,8 @@ export default {
         "collide",
         forceCollide()
           .strength(0.05)
-          .radius(d => {
-            return d[this.nodeSizeKey];
+          .radius(node => {
+            return this.networkNodes.ComputeSize(node);
           })
       )
       .force("link", forceLink(this.graph.links))
@@ -161,23 +167,7 @@ export default {
       this.simulation.restart();
     },
     computeTruePadding(node) {
-      return node[this.nodeSizeKey] + this.padding;
-    },
-    computeX(node) {
-      const truePadding = this.computeTruePadding(node);
-      return (
-        truePadding +
-        ((node.x - this.bounds.minX) * (this.width - 2 * truePadding)) /
-          (this.bounds.maxX - this.bounds.minX)
-      );
-    },
-    computeY(node) {
-      const truePadding = this.computeTruePadding(node);
-      return (
-        truePadding +
-        ((node.y - this.bounds.minY) * (this.height - 2 * truePadding)) /
-          (this.bounds.maxY - this.bounds.minY)
-      );
+      return this.networkNodes.ComputeSize(node) + this.padding;
     }
   }
 };
