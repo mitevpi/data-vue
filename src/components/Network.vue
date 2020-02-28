@@ -16,7 +16,7 @@
         :y1="link.source.cy"
         :x2="link.target.cx"
         :y2="link.target.cy"
-        :stroke-width="networkLinks.ComputeSize(link)"
+        :stroke-width="link.strokeWidth"
         class="network-link"
       />
     </g>
@@ -28,9 +28,9 @@
         class="network-node"
         :cx="node.cx"
         :cy="node.cy"
-        :r="networkNodes.ComputeSize(node)"
+        :r="node.radius"
         stroke="white"
-        :stroke-width="networkNodes.ComputeStrokeSize(node)"
+        :stroke-width="node.strokeWidth"
         @mousedown="
           currentMove = { x: $event.screenX, y: $event.screenY, node: node }
         "
@@ -88,7 +88,7 @@ export default {
     // (Optional) The stroke color to apply on the nodes in the network
     nodeStrokeColor: Number,
     // (Optional) The stroke width to apply to the links between nodes in the network
-    linkSize: Number,
+    linkSize: String,
     // (Optional) The stroke color to apply to the links between nodes in the network
     linkColor: String
   },
@@ -128,6 +128,11 @@ export default {
       this.graph.nodes.map(node => {
         node.cx = this.networkNodes.ComputeX(node, this.width);
         node.cy = this.networkNodes.ComputeY(node, this.height);
+        node.radius = this.networkNodes.ComputeSize(node);
+        node.strokeWidth = this.networkNodes.ComputeStrokeSize(node);
+      });
+      this.graph.links.map(link => {
+        link.strokeWidth = this.networkLinks.ComputeSize(link);
       });
       return this.graph;
     }
@@ -185,7 +190,6 @@ export default {
 
 .network-node {
   stroke: var(--node-stroke-color);
-  // stroke-width: var(--node-stroke-size);
   fill: var(--node-color);
 }
 

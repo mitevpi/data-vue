@@ -12,7 +12,7 @@ export class NetworkNodes {
 
   ComputeProperty(dataset, key, alternative) {
     if (Object.prototype.hasOwnProperty.call(dataset, key)) return dataset[key];
-    if (!Number.isNaN(key)) return +key;
+    if (!Number.isNaN(+key)) return +key;
     return alternative;
   }
 
