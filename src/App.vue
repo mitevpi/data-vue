@@ -22,7 +22,7 @@
       node-color="lightgray"
       link-color="gray"
       node-label-key="size"
-      node-size-key="size"
+      node-size="size"
     />
   </div>
 </template>

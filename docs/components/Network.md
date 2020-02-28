@@ -5,10 +5,10 @@
 <!-- @vuese:Network:props:start -->
 |Name|Description|Type|Required|Default|
 |---|---|---|---|---|
-|width|-|`Number`|`false`|-|
-|height|-|`Number`|`false`|-|
+|width|Chart width|`Number`|`false`|-|
+|height|Chart height|`Number`|`false`|-|
 |graph|The array of data objects to visualize|`Object`|`false`|-|
-|nodeSizeKey|The name of the property in the dataset to define node scaling|`String`|`false`|-|
+|nodeSize|(Optional) The name of the property in the dataset to define node scaling|`String`|`false`|-|
 |nodeLabelKey|(Optional) The name of the property in the dataset to use as a node label|`String`|`false`|-|
 |nodeColor|(Optional) The color to apply on the nodes in the network|`String`|`false`|-|
 |nodeColorHover|(Optional) The color to apply on the nodes in the network when hovered over|`String`|`false`|-|

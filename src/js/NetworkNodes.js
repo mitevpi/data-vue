@@ -30,6 +30,7 @@ export class NetworkNodes {
   ComputeSize(node) {
     if (Object.prototype.hasOwnProperty.call(node, this.nodeSizeKey))
       return node[this.nodeSizeKey];
+    if (!Number.isNaN(this.nodeSizeKey)) return +this.nodeSizeKey;
     return 20;
   }
 }

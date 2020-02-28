@@ -16,6 +16,7 @@
         :y1="link.source.cy"
         :x2="link.target.cx"
         :y2="link.target.cy"
+        :stroke-width="networkLinks.ComputeSize(link)"
         class="network-link"
       />
     </g>
@@ -61,6 +62,8 @@ import {
   forceCollide
 } from "d3-force";
 import { NetworkNodes } from "../js/NetworkNodes";
+import { NetworkLinks } from "../js/NetworkLinks";
+
 
 export default {
   name: "Network",
@@ -72,7 +75,7 @@ export default {
     // The array of data objects to visualize
     graph: Object,
     // (Optional) The name of the property in the dataset to define node scaling
-    nodeSizeKey: String,
+    nodeSize: String,
     // (Optional) The name of the property in the dataset to use as a node label
     nodeLabelKey: String,
     // (Optional) The color to apply on the nodes in the network
@@ -93,7 +96,8 @@ export default {
   data: () => ({
     padding: 5,
     simulation: null,
-    currentMove: null
+    currentMove: null,
+    networkLinks: null
   }),
   computed: {
     bounds() {
@@ -111,12 +115,11 @@ export default {
         "--node-stroke-size": this.nodeStrokeSize || 0.5,
         "--node-stroke-size-hover": this.nodeStrokeSizeHover || 2,
         "--node-stroke-color": this.nodeStrokeColor || "black",
-        "--link-color": this.linkColor || "black",
-        "--link-size": this.linkSize || 2
+        "--link-color": this.linkColor || "black"
       };
     },
     networkNodes() {
-      return new NetworkNodes(this.nodeSizeKey, this.padding, this.bounds);
+      return new NetworkNodes(this.nodeSize, this.padding, this.bounds);
     },
     graphComputed() {
       this.graph.nodes.map(node => {
@@ -127,6 +130,7 @@ export default {
     }
   },
   created() {
+    this.networkLinks = new NetworkLinks(this.linkSize);
     this.simulation = forceSimulation(this.graph.nodes)
       .force(
         "charge",
@@ -191,6 +195,5 @@ export default {
 }
 .network-link {
   stroke: var(--link-color);
-  stroke-width: var(--link-size);
 }
 </style>

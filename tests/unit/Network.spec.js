@@ -14,7 +14,7 @@ describe("Network.vue", () => {
       width: 600,
       height: 600,
       graph: netData,
-      "node-size-key": "size"
+      "node-size": "size"
     }
   });
 
@@ -23,7 +23,7 @@ describe("Network.vue", () => {
       width: 600,
       height: 600,
       graph: netData,
-      "node-size-key": "size",
+      "node-size": "size",
       "node-color": "lightgray",
       "link-color": "gray",
       "node-label-key": "size"
