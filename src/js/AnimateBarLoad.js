@@ -1,5 +1,16 @@
 import { selectAll } from "d3-selection";
 import { transition } from "d3-transition";
+import { Numbers } from "@mitevpi/algos";
+
+function ScaleY(val, dataMin, dataMax, newMin, newMax) {
+  return Numbers.normalizeToRange(
+    val,
+    dataMin > 0 ? 0 : dataMin,
+    dataMax,
+    newMin,
+    newMax
+  );
+}
 
 function Grow(
   groupId,

@@ -26,7 +26,8 @@ using D3 and Vue.js: `v3.js`.
 
 To use this module, install locally using the command below, or clone this repository and import the .vue files
 directly from source. Full documentation can be found on the [GitHub Pages Site](https://mitevpi.github.io/data-vue/)
-for this project. Example usages and component demos can be found on [CodeSandbox](http://bit.ly/v3js-demo).
+for this project. Editable example usages and component demos can be found on [CodeSandbox](http://bit.ly/v3js-demo),
+and a [deployed demo](http://bit.ly/v3js-deployed) is also available.
 
 ```cmd
 npm i @mitevpi/v3
@@ -89,7 +90,8 @@ Vue.use(BarChart);
 ## Documentation
 
 Full documentation can be found on the [GitHub Pages Site](https://mitevpi.github.io/data-vue/)
-for this project. Example usages and component demos can be found on [CodeSandbox](http://bit.ly/v3js-demo).
+for this project.Editable example usages and component demos can be found on [CodeSandbox](http://bit.ly/v3js-demo),
+and a [deployed demo](http://bit.ly/v3js-deployed) is also available.
 
 ## Developer Documentation
 

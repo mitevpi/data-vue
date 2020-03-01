@@ -15,7 +15,7 @@
               v-for="(item, i) in data"
               :key="item[xKey] + 'bar'"
               :x="xScale(item[xKey])"
-              :y="yScale(0)"
+              :y="ScaleY(0)"
               :width="xScale.bandwidth()"
               :height="0"
               :style="{ '--i': i }"
@@ -28,7 +28,7 @@
                 v-for="(item, i) in data"
                 :key="item[xKey] + 'top'"
                 :x="xScale(item[xKey]) + xScale.bandwidth() / 2 - 10"
-                :y="yScale(0)"
+                :y="ScaleY(0)"
                 class="bar-label-top"
                 :style="{ '--i': i }"
               >
@@ -44,7 +44,7 @@
                   v-for="(item, i) in data"
                   :key="item[xKey] + 'bottom'"
                   :x="xScale(item[xKey])"
-                  :y="yScale(0) + 20"
+                  :y="ScaleY(0) + 20"
                   class="bar-label-bottom"
                   :style="{ '--i': i }"
                 >
@@ -60,8 +60,13 @@
 </template>
 
 <script>
-import { ArraysObjective, Strings, StringsLatin } from "@mitevpi/algos";
-import { scaleLinear, scaleBand } from "d3-scale";
+import {
+  ArraysObjective,
+  Strings,
+  StringsLatin,
+  Numbers
+} from "@mitevpi/algos";
+import { scaleBand } from "d3-scale";
 import Fade from "./Transitions/Fade.vue";
 
 import { GrowAll } from "../js/AnimateBarLoad";
@@ -116,6 +121,9 @@ export default {
     groupId() {
       return StringsLatin.removeNonAlpha(Strings.createUniqueID());
     },
+    dataCount() {
+      return this.data.length;
+    },
     /**
      * @vuese
      * The maximum value in the core dataset.
@@ -149,16 +157,6 @@ export default {
     },
     /**
      * @vuese
-     * The D3 scale function for the Y axis (based on the Y key).
-     * @type Function
-     */
-    yScale() {
-      return scaleLinear()
-        .rangeRound([this.svgHeight, 0])
-        .domain([this.dataMin > 0 ? 0 : this.dataMin, this.dataMax]);
-    },
-    /**
-     * @vuese
      * The computed height of the SVG container, based on the overall width.
      * @type Number
      */
@@ -174,9 +172,6 @@ export default {
     sortTransition() {
       return this.animate ? "flip-list" : "disabled-list";
     },
-    dataCount() {
-      return this.data.length;
-    },
     cssProps() {
       return {
         "--bar-color": this.barColor || "steelblue",
@@ -190,7 +185,7 @@ export default {
         GrowAll(
           this.groupId,
           this.data,
-          this.yScale,
+          this.ScaleY,
           this.yKey,
           this.svgHeight
         );
@@ -201,12 +196,21 @@ export default {
     this.svgWidth = this.$refs.container.offsetWidth * 0.75;
     this.AddResizeListener();
     // TODO: ADD TOGGLE FOR DIFFERENT LOAD ANIMATIONS
-    GrowAll(this.groupId, this.data, this.yScale, this.yKey, this.svgHeight);
+    GrowAll(this.groupId, this.data, this.ScaleY, this.yKey, this.svgHeight);
     setTimeout(() => {
       this.animate = true;
     }, 1100);
   },
   methods: {
+    ScaleY(val) {
+      return Numbers.normalizeToRange(
+        val,
+        this.dataMin > 0 ? 0 : this.dataMin,
+        this.dataMax,
+        this.svgHeight,
+        0
+      );
+    },
     SortX() {
       this.sortType = ToggleSortByX(this.sortType, this.data, this.yKey);
     },
@@ -225,7 +229,7 @@ export default {
           GrowAll(
             this.groupId,
             this.data,
-            this.yScale,
+            this.ScaleY,
             this.yKey,
             this.svgHeight
           );
