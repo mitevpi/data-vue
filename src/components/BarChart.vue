@@ -14,9 +14,9 @@
             <rect
               v-for="(item, i) in data"
               :key="item[xKey] + 'bar'"
-              :x="xScale(item[xKey])"
+              :x="ScaleX(i)"
               :y="ScaleY(0)"
-              :width="xScale.bandwidth()"
+              :width="barWidth"
               :height="0"
               :style="{ '--i': i }"
               class="bar-positive"
@@ -27,7 +27,7 @@
               <text
                 v-for="(item, i) in data"
                 :key="item[xKey] + 'top'"
-                :x="xScale(item[xKey]) + xScale.bandwidth() / 2 - 10"
+                :x="ScaleX(i) + barWidth / 2 - 10"
                 :y="ScaleY(0)"
                 class="bar-label-top"
                 :style="{ '--i': i }"
@@ -43,7 +43,7 @@
                 <text
                   v-for="(item, i) in data"
                   :key="item[xKey] + 'bottom'"
-                  :x="xScale(item[xKey])"
+                  :x="ScaleX(i)"
                   :y="ScaleY(0) + 20"
                   class="bar-label-bottom"
                   :style="{ '--i': i }"
@@ -66,7 +66,6 @@ import {
   StringsLatin,
   Numbers
 } from "@mitevpi/algos";
-import { scaleBand } from "d3-scale";
 import Fade from "./Transitions/Fade.vue";
 
 import { GrowAll } from "../js/AnimateBarLoad";
@@ -140,20 +139,9 @@ export default {
     dataMin() {
       return ArraysObjective.min(this.data, this.yKey);
     },
-    /**
-     * @vuese
-     * The D3 scale function for the X axis (based on the X key).
-     * @type Function
-     */
-    xScale() {
-      return scaleBand()
-        .rangeRound([0, this.svgWidth])
-        .padding(0.1)
-        .domain(
-          this.data.map(d => {
-            return d[this.xKey];
-          })
-        );
+    barWidth() {
+      const finalWidth = this.svgWidth / this.dataCount - 5;
+      return finalWidth > 0 ? finalWidth : 0;
     },
     /**
      * @vuese
@@ -210,6 +198,9 @@ export default {
         this.svgHeight,
         0
       );
+    },
+    ScaleX(val) {
+      return Numbers.normalizeToRange(val, 0, this.dataCount, 0, this.svgWidth);
     },
     SortX() {
       this.sortType = ToggleSortByX(this.sortType, this.data, this.yKey);
