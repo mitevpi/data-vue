@@ -38,8 +38,6 @@ Animated, reactive bar chart
 |groupId|`String`|A unique ID for the `svg`/`g` container for this chart.|No|
 |dataMax|`Number`|The maximum value in the core dataset.|No|
 |dataMin|`Number`|The minimum value in the core dataset.|No|
-|xScale|`Function`|The D3 scale function for the X axis (based on the X key).|No|
-|yScale|`Function`|The D3 scale function for the Y axis (based on the Y key).|No|
 |svgHeight|`Number`|The computed height of the SVG container, based on the overall width.|No|
 |sortTransition|`String`|Whether or not to activate the sort transition animation (if active on render, it will conflict with the "grow" animation.|No|
 

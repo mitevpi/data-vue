@@ -10,7 +10,7 @@
   >
     <g>
       <line
-        v-for="link in graphComputed.links"
+        v-for="link in graph.links"
         :key="String(link.source.index) + String(link.target.index)"
         :x1="link.source.cx"
         :y1="link.source.cy"
@@ -23,7 +23,7 @@
 
     <g>
       <circle
-        v-for="(node, i) in graphComputed.nodes"
+        v-for="(node, i) in graph.nodes"
         :key="i + 'circle'"
         class="network-node"
         :cx="node.cx"
@@ -38,7 +38,7 @@
     </g>
     <g v-if="nodeLabelKey" class="noselect">
       <text
-        v-for="(node, i) in graphComputed.nodes"
+        v-for="(node, i) in graph.nodes"
         :key="i + 'circle-label'"
         :x="node.cx"
         :y="node.cy"
@@ -96,7 +96,8 @@ export default {
     padding: 5,
     simulation: null,
     currentMove: null,
-    networkLinks: null
+    networkLinks: null,
+    networkNodes: null
   }),
   computed: {
     bounds() {
@@ -115,41 +116,34 @@ export default {
         "--node-stroke-color": this.nodeStrokeColor || "black",
         "--link-color": this.linkColor || "black"
       };
-    },
-    networkNodes() {
-      return new NetworkNodes(
-        this.nodeSize,
-        this.nodeStrokeSize,
-        this.padding,
-        this.bounds
-      );
-    },
-    graphComputed() {
+    }
+  },
+  watch: {
+    bounds(val) {
+      this.networkNodes.bounds = val;
       this.graph.nodes.map(node => {
         node.cx = this.networkNodes.ComputeX(node, this.width);
         node.cy = this.networkNodes.ComputeY(node, this.height);
-        node.radius = this.networkNodes.ComputeSize(node);
-        node.strokeWidth = this.networkNodes.ComputeStrokeSize(node);
       });
-      this.graph.links.map(link => {
-        link.strokeWidth = this.networkLinks.ComputeSize(link);
-      });
-      return this.graph;
     }
   },
-  created() {
+  mounted() {
     this.networkLinks = new NetworkLinks(this.linkSize);
+    this.networkNodes = new NetworkNodes(
+      this.nodeSize,
+      this.nodeStrokeSize,
+      this.padding,
+      this.bounds
+    );
+    this.computeGraphProps();
     this.simulation = forceSimulation(this.graph.nodes)
-      .force(
-        "charge",
-        forceManyBody().strength(d => -100)
-      )
+      .force("charge", forceManyBody().strength(-100))
       .force(
         "collide",
         forceCollide()
           .strength(0.05)
           .radius(node => {
-            return this.networkNodes.ComputeSize(node);
+            return node.radius;
           })
       )
       .force("link", forceLink(this.graph.links))
@@ -178,8 +172,14 @@ export default {
       this.simulation.alpha(1);
       this.simulation.restart();
     },
-    computeTruePadding(node) {
-      return this.networkNodes.ComputeSize(node) + this.padding;
+    computeGraphProps() {
+      this.graph.nodes.map(node => {
+        node.radius = this.networkNodes.ComputeSize(node);
+        node.strokeWidth = this.networkNodes.ComputeStrokeSize(node);
+      });
+      this.graph.links.map(link => {
+        link.strokeWidth = this.networkLinks.ComputeSize(link);
+      });
     }
   }
 };

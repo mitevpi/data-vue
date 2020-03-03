@@ -13,8 +13,7 @@ describe("Network.vue", () => {
     propsData: {
       width: 600,
       height: 600,
-      graph: netData,
-      "node-size": "size"
+      graph: netData
     }
   });
 
@@ -30,16 +29,23 @@ describe("Network.vue", () => {
     }
   });
 
-  it("has a created hook", () => {
-    expect(typeof Network.created).toBe("function");
+  it("has a mounted hook", () => {
+    expect(typeof Network.mounted).toBe("function");
+  });
+
+  it("renders a svg element", () => {
+    // expect(wrapperSlim.findAll("svg").exists()).toBe(true);
+    expect(wrapperFull.findAll("svg").exists()).toBe(true);
   });
 
   it("renders nodes with the network-node class", () => {
-    expect(wrapperSlim.findAll(".network-node").length).toEqual(dataLength);
+    // expect(wrapperSlim.findAll(".network-node").length).toEqual(dataLength);
+    expect(wrapperFull.findAll(".network-node").length).toEqual(dataLength);
   });
 
   it("renders links with the network-link class", () => {
-    expect(wrapperSlim.findAll(".network-link").length).toEqual(dataLength - 1);
+    // expect(wrapperSlim.findAll(".network-link").length).toEqual(dataLength - 1);
+    expect(wrapperFull.findAll(".network-link").length).toEqual(dataLength - 1);
   });
 
   it("renders node labels on prompt", () => {
