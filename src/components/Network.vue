@@ -77,6 +77,8 @@ export default {
     nodeSize: String,
     // (Optional) The name of the property in the dataset to use as a node label
     nodeLabelKey: String,
+    // (Optional) The color to apply on the node labels in the network,
+    nodeLabelColor: String,
     // (Optional) The color to apply on the nodes in the network
     nodeColor: String,
     // (Optional) The color to apply on the nodes in the network when hovered over
@@ -86,7 +88,7 @@ export default {
     // (Optional) The stroke width to apply on the nodes in the network when hovered over
     nodeStrokeSizeHover: Number,
     // (Optional) The stroke color to apply on the nodes in the network
-    nodeStrokeColor: Number,
+    nodeStrokeColor: String,
     // (Optional) The stroke width to apply to the links between nodes in the network
     linkSize: String,
     // (Optional) The stroke color to apply to the links between nodes in the network
@@ -114,7 +116,8 @@ export default {
         "--node-color-hover": this.nodeColorHover || this.nodeColor,
         "--node-stroke-size-hover": this.nodeStrokeSizeHover || 2,
         "--node-stroke-color": this.nodeStrokeColor || "black",
-        "--link-color": this.linkColor || "black"
+        "--link-color": this.linkColor || "black",
+        "--node-label-color": this.nodeLabelColor || "black"
       };
     }
   },
@@ -194,6 +197,7 @@ export default {
 }
 
 .network-node-label {
+  fill: var(--node-label-color);
 }
 
 .network-node:hover {
