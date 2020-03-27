@@ -10,7 +10,7 @@
       >
         <!--TODO: Figure out better logic for not cutting off labels-->
         <g :id="groupId" transform="translate(0,20)">
-          <transition-group :name="sortTransition" tag="g">
+          <transition-group name="flip-list" tag="g">
             <circle
               v-for="(item, i) in data"
               :key="item[xKey] + 'point'"
@@ -20,14 +20,6 @@
               class="point-positive"
               r="10"
             />
-            <!--            <rect-->
-            <!--              v-for="(item, i) in data"-->
-            <!--              :key="item[xKey] + 'bar'"-->
-            <!--              :x="ScaleX(i)"-->
-            <!--              :y="ScaleY(item[yKey])"-->
-            <!--              :width="barWidth"-->
-            <!--              :height="svgHeight - ScaleY(item[yKey])"-->
-            <!--            />-->
           </transition-group>
 
           <fade>
