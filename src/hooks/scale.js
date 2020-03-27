@@ -2,14 +2,10 @@ import { computed } from "@vue/composition-api";
 import { Numbers } from "@mitevpi/algos";
 
 export function scale(width, count) {
-  const barWidth = computed(() => {
+  return computed(() => {
     const finalWidth = width.value / count.value - 5;
     return finalWidth > 0 ? finalWidth : 0;
   });
-
-  return {
-    barWidth
-  };
 }
 
 export function scaleYLinear(val, min, max, height) {

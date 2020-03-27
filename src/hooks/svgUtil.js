@@ -2,12 +2,10 @@ import { computed } from "@vue/composition-api";
 
 import { Strings, StringsLatin } from "@mitevpi/algos";
 
-export default function svgUtil(width) {
-  const groupId = StringsLatin.removeNonAlpha(Strings.createUniqueID());
-  const svgHeight = computed(() => width / 1.61803398875);
+export function createGroupId() {
+  return StringsLatin.removeNonAlpha(Strings.createUniqueID());
+}
 
-  return {
-    groupId,
-    svgHeight
-  };
+export function goldenHeight(width) {
+  return computed(() => width.value / 1.61803398875);
 }

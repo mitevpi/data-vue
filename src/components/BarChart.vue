@@ -60,12 +60,11 @@
 </template>
 
 <script>
-import { Numbers } from "@mitevpi/algos";
-import { reactive, computed, ref } from "@vue/composition-api";
+import { reactive, computed, watch } from "@vue/composition-api";
 import Fade from "./Transitions/Fade.vue";
 
 import datasetMetrics from "../hooks/dataUtil";
-import svgUtil from "../hooks/svgUtil";
+import { createGroupId, goldenHeight } from "../hooks/svgUtil";
 import { scale, scaleYLinear, scaleXLinear } from "../hooks/scale";
 
 import { GrowAll } from "../js/AnimateBarLoad";
@@ -99,7 +98,8 @@ export default {
   },
   setup(props) {
     const { dataCount, dataMax, dataMin } = datasetMetrics(props);
-    const { groupId } = svgUtil();
+
+    const groupId = createGroupId();
 
     const state = reactive({
       svgWidth: 0,
@@ -112,7 +112,10 @@ export default {
       return state.svgWidth;
     });
 
-    const { barWidth } = scale(svgWidthComputed, dataCount);
+    const barWidth = scale(svgWidthComputed, dataCount);
+    const svgHeight = goldenHeight(svgWidthComputed);
+
+    watch(dataCount, () => setTimeout(() => this.AnimateGrow(), 10));
 
     return {
       state,
@@ -121,13 +124,11 @@ export default {
       dataMin,
       groupId,
       barWidth,
-      svgWidthComputed
+      svgWidthComputed,
+      svgHeight
     };
   },
   computed: {
-    svgHeight() {
-      return this.state.svgWidth / 1.61803398875; // golden ratio
-    },
     sortTransition() {
       return this.state.animate ? "flip-list" : "disabled-list";
     },
@@ -138,29 +139,16 @@ export default {
       };
     }
   },
-  watch: {
-    dataCount() {
-      setTimeout(() => {
-        GrowAll(
-          this.groupId,
-          this.data,
-          this.ScaleY,
-          this.yKey,
-          this.svgHeight
-        );
-      }, 10);
-    }
-  },
   mounted() {
     this.state.svgWidth = this.$refs.container.offsetWidth * 0.75;
     this.AddResizeListener();
-    // TODO: ADD TOGGLE FOR DIFFERENT LOAD ANIMATIONS
-    GrowAll(this.groupId, this.data, this.ScaleY, this.yKey, this.svgHeight);
-    setTimeout(() => {
-      this.state.animate = true;
-    }, 1100);
+    this.AnimateGrow();
+    setTimeout(() => (this.state.animate = true), 1100);
   },
   methods: {
+    AnimateGrow() {
+      GrowAll(this.groupId, this.data, this.ScaleY, this.yKey, this.svgHeight);
+    },
     ScaleY(val) {
       return scaleYLinear(val, this.dataMin, this.dataMax, this.svgHeight, 0);
     },
@@ -182,14 +170,7 @@ export default {
         setTimeout(() => {
           self.state.redrawToggle = true;
           self.state.svgWidth = self.$refs.container.offsetWidth * 0.85;
-          // console.log("RESIZE", this.data);
-          GrowAll(
-            this.groupId,
-            this.data,
-            this.ScaleY,
-            this.yKey,
-            this.svgHeight
-          );
+          this.AnimateGrow();
         }, 300);
       });
     }
