@@ -61,11 +61,12 @@
 
 <script>
 import { Numbers } from "@mitevpi/algos";
-import { reactive } from "@vue/composition-api";
+import { reactive, computed, ref } from "@vue/composition-api";
 import Fade from "./Transitions/Fade.vue";
 
 import datasetMetrics from "../hooks/dataUtil";
 import svgUtil from "../hooks/svgUtil";
+import { scale, scaleYLinear, scaleXLinear } from "../hooks/scale";
 
 import { GrowAll } from "../js/AnimateBarLoad";
 import { ToggleSortByX } from "../js/Sort";
@@ -107,19 +108,23 @@ export default {
       animate: false
     });
 
+    const svgWidthComputed = computed(() => {
+      return state.svgWidth;
+    });
+
+    const { barWidth } = scale(svgWidthComputed, dataCount);
+
     return {
       state,
       dataCount,
       dataMax,
       dataMin,
-      groupId
+      groupId,
+      barWidth,
+      svgWidthComputed
     };
   },
   computed: {
-    barWidth() {
-      const finalWidth = this.state.svgWidth / this.dataCount - 5;
-      return finalWidth > 0 ? finalWidth : 0;
-    },
     svgHeight() {
       return this.state.svgWidth / 1.61803398875; // golden ratio
     },
@@ -157,22 +162,10 @@ export default {
   },
   methods: {
     ScaleY(val) {
-      return Numbers.normalizeToRange(
-        val,
-        this.dataMin > 0 ? 0 : this.dataMin,
-        this.dataMax,
-        this.svgHeight,
-        0
-      );
+      return scaleYLinear(val, this.dataMin, this.dataMax, this.svgHeight, 0);
     },
     ScaleX(val) {
-      return Numbers.normalizeToRange(
-        val,
-        0,
-        this.dataCount,
-        0,
-        this.state.svgWidth
-      );
+      return scaleXLinear(val, this.dataCount, this.state.svgWidth);
     },
     SortX() {
       this.state.sortType = ToggleSortByX(
@@ -181,10 +174,6 @@ export default {
         this.yKey
       );
     },
-    /**
-     * @vuese
-     * Add a listener to update and redraw the chart after X seconds of a resize event.
-     */
     AddResizeListener() {
       // redraw the chart 300ms after the window has been resized
       const self = this;
