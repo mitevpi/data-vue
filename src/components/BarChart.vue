@@ -66,10 +66,13 @@ import {
   StringsLatin,
   Numbers
 } from "@mitevpi/algos";
+import { watch, computed } from "@vue/composition-api";
 import Fade from "./Transitions/Fade.vue";
 
+import datasetMetrics from "../hooks/dataUtil";
+
 import { GrowAll } from "../js/AnimateBarLoad";
-import { ToggleSortByX } from "../js/AnimateBarSort";
+import { ToggleSortByX } from "../js/Sort";
 
 // Animated, reactive bar chart
 export default {
@@ -111,6 +114,23 @@ export default {
     sortType: "none",
     animate: false
   }),
+  setup(props) {
+    const { dataCount, dataMax, dataMin } = datasetMetrics(
+      props.data,
+      props.yKey
+    );
+
+
+    const dataCount2 = computed(() => props.data.length);
+    watch(dataCount2, () => console.log("dcount2", dataCount2.value));
+    watch(dataCount, () => console.log("dcount", dataCount.value));
+
+    return {
+      dataCount,
+      dataMax,
+      dataMin
+    };
+  },
   computed: {
     /**
      * @vuese
@@ -120,43 +140,13 @@ export default {
     groupId() {
       return StringsLatin.removeNonAlpha(Strings.createUniqueID());
     },
-    dataCount() {
-      return this.data.length;
-    },
-    /**
-     * @vuese
-     * The maximum value in the core dataset.
-     * @type Number
-     */
-    dataMax() {
-      return ArraysObjective.max(this.data, this.yKey);
-    },
-    /**
-     * @vuese
-     * The minimum value in the core dataset.
-     * @type Number
-     */
-    dataMin() {
-      return ArraysObjective.min(this.data, this.yKey);
-    },
     barWidth() {
       const finalWidth = this.svgWidth / this.dataCount - 5;
       return finalWidth > 0 ? finalWidth : 0;
     },
-    /**
-     * @vuese
-     * The computed height of the SVG container, based on the overall width.
-     * @type Number
-     */
     svgHeight() {
       return this.svgWidth / 1.61803398875; // golden ratio
     },
-    /**
-     * @vuese
-     * Whether or not to activate the sort transition animation (if active on render,
-     * it will conflict with the "grow" animation.
-     * @type String
-     */
     sortTransition() {
       return this.animate ? "flip-list" : "disabled-list";
     },
