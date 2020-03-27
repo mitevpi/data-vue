@@ -3,8 +3,8 @@
     <h1 v-show="title !== null" class="chart-title">{{ title }}</h1>
     <fade>
       <svg
-        v-if="redrawToggle === true"
-        :width="svgWidth"
+        v-if="state.redrawToggle === true"
+        :width="state.svgWidth"
         :height="svgHeight * 1.25"
         @click="SortX"
       >
@@ -60,16 +60,12 @@
 </template>
 
 <script>
-import {
-  ArraysObjective,
-  Strings,
-  StringsLatin,
-  Numbers
-} from "@mitevpi/algos";
-import { watch, computed } from "@vue/composition-api";
+import { Numbers } from "@mitevpi/algos";
+import { reactive } from "@vue/composition-api";
 import Fade from "./Transitions/Fade.vue";
 
 import datasetMetrics from "../hooks/dataUtil";
+import svgUtil from "../hooks/svgUtil";
 
 import { GrowAll } from "../js/AnimateBarLoad";
 import { ToggleSortByX } from "../js/Sort";
@@ -100,47 +96,35 @@ export default {
     // (Optional) Whether or not to have labels at the bottom of each bar
     bottomLabels: Boolean
   },
-  data: () => ({
-    /**
-     * @vuese
-     * The width of the SVG element, determined by the width of the parent div.
-     */
-    svgWidth: 0,
-    /**
-     * @vuese
-     * Whether or not to redraw the bar chart and re-run the animation (based on resize event).
-     */
-    redrawToggle: true,
-    sortType: "none",
-    animate: false
-  }),
   setup(props) {
     const { dataCount, dataMax, dataMin } = datasetMetrics(props);
+    const { groupId } = svgUtil();
+
+    const state = reactive({
+      svgWidth: 0,
+      redrawToggle: true,
+      sortType: "none",
+      animate: false
+    });
 
     return {
+      state,
       dataCount,
       dataMax,
-      dataMin
+      dataMin,
+      groupId
     };
   },
   computed: {
-    /**
-     * @vuese
-     * A unique ID for the `svg`/`g` container for this chart.
-     * @type String
-     */
-    groupId() {
-      return StringsLatin.removeNonAlpha(Strings.createUniqueID());
-    },
     barWidth() {
-      const finalWidth = this.svgWidth / this.dataCount - 5;
+      const finalWidth = this.state.svgWidth / this.dataCount - 5;
       return finalWidth > 0 ? finalWidth : 0;
     },
     svgHeight() {
-      return this.svgWidth / 1.61803398875; // golden ratio
+      return this.state.svgWidth / 1.61803398875; // golden ratio
     },
     sortTransition() {
-      return this.animate ? "flip-list" : "disabled-list";
+      return this.state.animate ? "flip-list" : "disabled-list";
     },
     cssProps() {
       return {
@@ -163,12 +147,12 @@ export default {
     }
   },
   mounted() {
-    this.svgWidth = this.$refs.container.offsetWidth * 0.75;
+    this.state.svgWidth = this.$refs.container.offsetWidth * 0.75;
     this.AddResizeListener();
     // TODO: ADD TOGGLE FOR DIFFERENT LOAD ANIMATIONS
     GrowAll(this.groupId, this.data, this.ScaleY, this.yKey, this.svgHeight);
     setTimeout(() => {
-      this.animate = true;
+      this.state.animate = true;
     }, 1100);
   },
   methods: {
@@ -182,10 +166,20 @@ export default {
       );
     },
     ScaleX(val) {
-      return Numbers.normalizeToRange(val, 0, this.dataCount, 0, this.svgWidth);
+      return Numbers.normalizeToRange(
+        val,
+        0,
+        this.dataCount,
+        0,
+        this.state.svgWidth
+      );
     },
     SortX() {
-      this.sortType = ToggleSortByX(this.sortType, this.data, this.yKey);
+      this.state.sortType = ToggleSortByX(
+        this.state.sortType,
+        this.data,
+        this.yKey
+      );
     },
     /**
      * @vuese
@@ -195,10 +189,11 @@ export default {
       // redraw the chart 300ms after the window has been resized
       const self = this;
       window.addEventListener("resize", () => {
-        self.redrawToggle = false;
+        self.state.redrawToggle = false;
         setTimeout(() => {
-          self.redrawToggle = true;
-          self.svgWidth = self.$refs.container.offsetWidth * 0.85;
+          self.state.redrawToggle = true;
+          self.state.svgWidth = self.$refs.container.offsetWidth * 0.85;
+          // console.log("RESIZE", this.data);
           GrowAll(
             this.groupId,
             this.data,
