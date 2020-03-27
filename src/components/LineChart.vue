@@ -11,15 +11,14 @@
         <!--TODO: Figure out better logic for not cutting off labels-->
         <g :id="groupId" transform="translate(0,20)">
           <transition-group :name="sortTransition" tag="g">
-            <rect
+            <circle
               v-for="(item, i) in data"
-              :key="item[xKey] + 'bar'"
-              :x="ScaleX(i)"
-              :y="ScaleY(item[yKey])"
-              :width="barWidth"
-              :height="svgHeight - ScaleY(item[yKey])"
+              :key="item[xKey] + 'point'"
+              :cx="ScaleX(i) + barWidth / 2"
+              :cy="ScaleY(item[yKey])"
               :style="{ '--i': i }"
-              class="bar-positive"
+              class="point-positive"
+              r="10"
             />
           </transition-group>
           <fade>
@@ -30,7 +29,7 @@
                   :key="item[xKey] + 'bottom'"
                   :x="ScaleX(i)"
                   :y="ScaleY(0) + 20"
-                  class="bar-label-bottom"
+                  class="point-label-bottom"
                   :style="{ '--i': i }"
                 >
                   {{ item[xKey] }}
@@ -53,8 +52,7 @@ import {
 } from "@mitevpi/algos";
 import Fade from "./Transitions/Fade.vue";
 
-import { GrowAll } from "../js/AnimateBarLoad";
-import { ToggleSortByX } from "../js/AnimateBarSort";
+import { ToggleSortByX } from "../js/Sort";
 
 // Animated, reactive bar chart
 export default {
@@ -77,8 +75,6 @@ export default {
     barColor: String,
     // (Optional) The color to apply on the bars when hovered over
     hoverColor: String,
-    // (Optional) Whether or not to have labels at the top of each bar
-    topLabels: Boolean,
     // (Optional) Whether or not to have labels at the bottom of each bar
     bottomLabels: Boolean
   },
@@ -113,28 +109,15 @@ export default {
     },
     cssProps() {
       return {
-        "--bar-color": this.barColor || "steelblue",
+        "--point-color": this.barColor || "steelblue",
         "--hover-color": this.hoverColor || "orange"
       };
     }
   },
-  watch: {
-    dataCount() {
-      setTimeout(() => {
-        GrowAll(
-          this.groupId,
-          this.data,
-          this.ScaleY,
-          this.yKey,
-          this.svgHeight
-        );
-      }, 10);
-    }
-  },
+  watch: {},
   mounted() {
     this.svgWidth = this.$refs.container.offsetWidth * 0.75;
     // TODO: ADD TOGGLE FOR DIFFERENT LOAD ANIMATIONS
-    GrowAll(this.groupId, this.data, this.ScaleY, this.yKey, this.svgHeight);
     setTimeout(() => {
       this.animate = true;
     }, 1100);
@@ -162,16 +145,16 @@ export default {
 <style scoped lang="scss">
 .chart-title {
 }
-.bar-label-top {
+.point-label-top {
 }
-.bar-label-bottom {
+.point-label-bottom {
 }
-.bar-positive {
+.point-positive {
   /*transition-duration: 0.3s;*/
-  fill: var(--bar-color);
+  fill: var(--point-color);
 }
 
-.bar-positive:hover {
+.point-positive:hover {
   /*transition-duration: 0.3s;*/
   fill: var(--hover-color);
 }
