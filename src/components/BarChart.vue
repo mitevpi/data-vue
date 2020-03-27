@@ -60,12 +60,13 @@
 </template>
 
 <script>
-import { reactive, computed, watch } from "@vue/composition-api";
+import { reactive, computed, watch, ref, onMounted } from "@vue/composition-api";
 import Fade from "./Transitions/Fade.vue";
 
 import datasetMetrics from "../hooks/dataUtil";
 import { createGroupId, goldenHeight } from "../hooks/svgUtil";
 import { scale, scaleYLinear, scaleXLinear } from "../hooks/scale";
+import { addResizeListener } from "../hooks/resize";
 
 import { GrowAll } from "../js/AnimateBarLoad";
 import { ToggleSortByX } from "../js/Sort";
@@ -98,8 +99,8 @@ export default {
   },
   setup(props) {
     const { dataCount, dataMax, dataMin } = datasetMetrics(props);
-
     const groupId = createGroupId();
+    const container = ref(null);
 
     const state = reactive({
       svgWidth: 0,
@@ -108,72 +109,60 @@ export default {
       animate: false
     });
 
-    const svgWidthComputed = computed(() => {
-      return state.svgWidth;
-    });
+    const svgWidthComputed = computed(() => state.svgWidth);
 
     const barWidth = scale(svgWidthComputed, dataCount);
     const svgHeight = goldenHeight(svgWidthComputed);
 
-    watch(dataCount, () => setTimeout(() => this.AnimateGrow(), 10));
+    const sortTransition = computed(() =>
+      state.animate ? "flip-list" : "disabled-list"
+    );
+
+    // console.log(refs.container);
+    const ScaleY = val =>
+      scaleYLinear(val, dataMin.value, dataMax.value, svgHeight.value, 0);
+
+    const ScaleX = val =>
+      scaleXLinear(val, dataCount.value, svgWidthComputed.value);
+
+    const AnimateGrow = () =>
+      GrowAll(groupId, props.data, ScaleY, props.yKey, svgHeight.value);
+
+    const SortX = () =>
+      (state.sortType = ToggleSortByX(state.sortType, props.data, props.yKey));
+
+    const cssProps = computed(() => {
+      return {
+        "--bar-color": props.barColor || "steelblue",
+        "--hover-color": props.hoverColor || "orange"
+      };
+    });
+
+    watch(dataCount, () => setTimeout(() => AnimateGrow(), 10));
+
+    onMounted(() => {
+      state.svgWidth = container.value.offsetWidth * 0.85;
+      addResizeListener(state, container.value, AnimateGrow);
+      AnimateGrow();
+      setTimeout(() => (state.animate = true), 1100); // turn on sort
+    });
 
     return {
       state,
+      container,
       dataCount,
       dataMax,
       dataMin,
       groupId,
       barWidth,
-      svgWidthComputed,
-      svgHeight
+      svgHeight,
+      sortTransition,
+      cssProps,
+      SortX,
+      ScaleY,
+      ScaleX,
+      AnimateGrow
     };
-  },
-  computed: {
-    sortTransition() {
-      return this.state.animate ? "flip-list" : "disabled-list";
-    },
-    cssProps() {
-      return {
-        "--bar-color": this.barColor || "steelblue",
-        "--hover-color": this.hoverColor || "orange"
-      };
-    }
-  },
-  mounted() {
-    this.state.svgWidth = this.$refs.container.offsetWidth * 0.75;
-    this.AddResizeListener();
-    this.AnimateGrow();
-    setTimeout(() => (this.state.animate = true), 1100);
-  },
-  methods: {
-    AnimateGrow() {
-      GrowAll(this.groupId, this.data, this.ScaleY, this.yKey, this.svgHeight);
-    },
-    ScaleY(val) {
-      return scaleYLinear(val, this.dataMin, this.dataMax, this.svgHeight, 0);
-    },
-    ScaleX(val) {
-      return scaleXLinear(val, this.dataCount, this.state.svgWidth);
-    },
-    SortX() {
-      this.state.sortType = ToggleSortByX(
-        this.state.sortType,
-        this.data,
-        this.yKey
-      );
-    },
-    AddResizeListener() {
-      // redraw the chart 300ms after the window has been resized
-      const self = this;
-      window.addEventListener("resize", () => {
-        self.state.redrawToggle = false;
-        setTimeout(() => {
-          self.state.redrawToggle = true;
-          self.state.svgWidth = self.$refs.container.offsetWidth * 0.85;
-          this.AnimateGrow();
-        }, 300);
-      });
-    }
   }
 };
 </script>
