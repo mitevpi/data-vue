@@ -115,15 +115,7 @@ export default {
     animate: false
   }),
   setup(props) {
-    const { dataCount, dataMax, dataMin } = datasetMetrics(
-      props.data,
-      props.yKey
-    );
-
-
-    const dataCount2 = computed(() => props.data.length);
-    watch(dataCount2, () => console.log("dcount2", dataCount2.value));
-    watch(dataCount, () => console.log("dcount", dataCount.value));
+    const { dataCount, dataMax, dataMin } = datasetMetrics(props);
 
     return {
       dataCount,
