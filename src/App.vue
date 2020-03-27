@@ -1,13 +1,13 @@
 <template>
   <div class="center global-font">
-    <bar-chart
-      title="Bar Chart"
-      x-key="name"
-      y-key="amount"
-      :data="barChartData"
-      :top-labels="true"
-      :bottom-labels="true"
-    />
+    <!--    <bar-chart-->
+    <!--      title="Bar Chart"-->
+    <!--      x-key="name"-->
+    <!--      y-key="amount"-->
+    <!--      :data="barChartData"-->
+    <!--      :top-labels="true"-->
+    <!--      :bottom-labels="true"-->
+    <!--    />-->
     <!--    <circle-pack-->
     <!--      :width="600"-->
     <!--      :height="600"-->
@@ -24,14 +24,14 @@
     <!--      node-label-key="size"-->
     <!--      node-size="size"-->
     <!--    />-->
-    <!--    <line-chart-->
-    <!--      title="Line Chart"-->
-    <!--      x-key="name"-->
-    <!--      y-key="amount"-->
-    <!--      :data="barChartData"-->
-    <!--      :top-labels="true"-->
-    <!--      :bottom-labels="true"-->
-    <!--    />-->
+    <point-plot
+      title="Point Plot"
+      x-key="name"
+      y-key="amount"
+      :data="barChartData"
+      :top-labels="true"
+      :bottom-labels="true"
+    />
     <!--  </div>-->
   </div>
 </template>
@@ -42,10 +42,10 @@ import { MockData } from "@mitevpi/algos";
 export default {
   name: "App",
   components: {
-    BarChart: () => import("./components/BarChart.vue")
+    // BarChart: () => import("./components/BarChart.vue")
     // CirclePack: () => import("./components/CirclePack.vue")
     // Network: () => import("./components/Network.vue"),
-    // LineChart: () => import("./components/LineChart.vue")
+    PointPlot: () => import("./components/PointPlot.vue")
   },
   data: () => ({
     circlePackData: [],
