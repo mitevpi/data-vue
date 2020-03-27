@@ -3,20 +3,24 @@ import Vue from "vue";
 import BarChart from "./components/BarChart.vue";
 import CirclePack from "./components/CirclePack.vue";
 import Network from "./components/Network.vue";
+import LineChart from "./components/LineChart.vue";
 
 const Components = {
   BarChart,
   CirclePack,
-  Network
+  Network,
+  LineChart
 };
 
 Vue.component("BarChart", BarChart);
 Vue.component("CirclePack", CirclePack);
 Vue.component("Network", Network);
+Vue.component("LineChart", LineChart);
 
 export { BarChart };
 export { CirclePack };
 export { Network };
+export { LineChart };
 
 // What should happen if the user installs the library as a plugin
 // function install(Vue) {

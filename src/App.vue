@@ -15,14 +15,22 @@
     <!--      y-key="r"-->
     <!--      :nodes="circlePackData"-->
     <!--    />-->
-    <network
-      :width="600"
-      :height="600"
-      :graph="networkData"
-      node-color="lightgray"
-      link-color="gray"
-      node-label-key="size"
-      node-size="size"
+    <!--    <network-->
+    <!--      :width="600"-->
+    <!--      :height="600"-->
+    <!--      :graph="networkData"-->
+    <!--      node-color="lightgray"-->
+    <!--      link-color="gray"-->
+    <!--      node-label-key="size"-->
+    <!--      node-size="size"-->
+    <!--    />-->
+    <line-chart
+      title="Line Chart"
+      x-key="name"
+      y-key="amount"
+      :data="barChartData"
+      :top-labels="true"
+      :bottom-labels="true"
     />
   </div>
 </template>
@@ -35,7 +43,8 @@ export default {
   components: {
     // BarChart: () => import("./components/BarChart.vue")
     // CirclePack: () => import("./components/CirclePack.vue")
-    Network: () => import("./components/Network.vue")
+    // Network: () => import("./components/Network.vue"),
+    LineChart: () => import("./components/LineChart.vue")
   },
   data: () => ({
     circlePackData: [],
