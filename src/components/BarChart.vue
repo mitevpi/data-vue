@@ -3,8 +3,8 @@
     <h1 v-show="title !== null" class="chart-title">{{ title }}</h1>
     <fade>
       <svg
-        v-if="redrawToggle === true"
-        :width="svgWidth"
+        v-if="state.redrawToggle === true"
+        :width="state.svgWidth"
         :height="svgHeight * 1.25"
         @click="SortX"
       >
@@ -38,19 +38,15 @@
           </g>
 
           <fade>
-            <g v-if="bottomLabels">
-              <transition-group :name="sortTransition" tag="g">
-                <text
-                  v-for="(item, i) in data"
-                  :key="item[xKey] + 'bottom'"
-                  :x="ScaleX(i)"
-                  :y="ScaleY(0) + 20"
-                  class="bar-label-bottom"
-                  :style="{ '--i': i }"
-                >
-                  {{ item[xKey] }}
-                </text>
-              </transition-group>
+            <g v-if="bottomLabels" class="bar-label-bottom">
+              <bottom-labels
+                :name="sortTransition"
+                :scale-x="ScaleX"
+                :scale-y="ScaleY"
+                :data="data"
+                :bar-width="barWidth"
+                :x-key="xKey"
+              />
             </g>
           </fade>
         </g>
@@ -61,21 +57,29 @@
 
 <script>
 import {
-  ArraysObjective,
-  Strings,
-  StringsLatin,
-  Numbers
-} from "@mitevpi/algos";
+  reactive,
+  computed,
+  watch,
+  ref,
+  onMounted
+} from "@vue/composition-api";
 import Fade from "./Transitions/Fade.vue";
+import BottomLabels from "./Cartesian Charts/BottomLabels.vue";
+
+import datasetMetrics from "../hooks/dataUtil";
+import { createGroupId, goldenHeight } from "../hooks/svgUtil";
+import { scale, scaleYLinear, scaleXLinear } from "../hooks/scale";
+import { addResizeListener } from "../hooks/resize";
 
 import { GrowAll } from "../js/AnimateBarLoad";
-import { ToggleSortByX } from "../js/AnimateBarSort";
+import { ToggleSortByX } from "../js/Sort";
 
 // Animated, reactive bar chart
 export default {
   name: "BarChart",
   components: {
-    Fade
+    Fade,
+    BottomLabels
   },
   props: {
     // Title of the chart
@@ -97,141 +101,79 @@ export default {
     // (Optional) Whether or not to have labels at the bottom of each bar
     bottomLabels: Boolean
   },
-  data: () => ({
-    /**
-     * @vuese
-     * The width of the SVG element, determined by the width of the parent div.
-     */
-    svgWidth: 0,
-    /**
-     * @vuese
-     * Whether or not to redraw the bar chart and re-run the animation (based on resize event).
-     */
-    redrawToggle: true,
-    sortType: "none",
-    animate: false
-  }),
-  computed: {
-    /**
-     * @vuese
-     * A unique ID for the `svg`/`g` container for this chart.
-     * @type String
-     */
-    groupId() {
-      return StringsLatin.removeNonAlpha(Strings.createUniqueID());
-    },
-    dataCount() {
-      return this.data.length;
-    },
-    /**
-     * @vuese
-     * The maximum value in the core dataset.
-     * @type Number
-     */
-    dataMax() {
-      return ArraysObjective.max(this.data, this.yKey);
-    },
-    /**
-     * @vuese
-     * The minimum value in the core dataset.
-     * @type Number
-     */
-    dataMin() {
-      return ArraysObjective.min(this.data, this.yKey);
-    },
-    barWidth() {
-      const finalWidth = this.svgWidth / this.dataCount - 5;
-      return finalWidth > 0 ? finalWidth : 0;
-    },
-    /**
-     * @vuese
-     * The computed height of the SVG container, based on the overall width.
-     * @type Number
-     */
-    svgHeight() {
-      return this.svgWidth / 1.61803398875; // golden ratio
-    },
-    /**
-     * @vuese
-     * Whether or not to activate the sort transition animation (if active on render,
-     * it will conflict with the "grow" animation.
-     * @type String
-     */
-    sortTransition() {
-      return this.animate ? "flip-list" : "disabled-list";
-    },
-    cssProps() {
+  setup(props) {
+    const { dataCount, dataMax, dataMin } = datasetMetrics(props);
+    const groupId = createGroupId();
+    const container = ref(null);
+
+    const state = reactive({
+      svgWidth: 0,
+      redrawToggle: true,
+      sortType: "none",
+      animate: false
+    });
+
+    const svgWidthComputed = computed(() => state.svgWidth);
+
+    const barWidth = scale(svgWidthComputed, dataCount);
+    const svgHeight = goldenHeight(svgWidthComputed);
+
+    const sortTransition = computed(() =>
+      state.animate ? "flip-list" : "disabled-list"
+    );
+
+    // console.log(refs.container);
+    const ScaleY = val =>
+      scaleYLinear(val, dataMin.value, dataMax.value, svgHeight.value, 0);
+
+    const ScaleX = val =>
+      scaleXLinear(val, dataCount.value, svgWidthComputed.value);
+
+    const AnimateGrow = () =>
+      GrowAll(groupId, props.data, ScaleY, props.yKey, svgHeight.value);
+
+    const SortX = () =>
+      (state.sortType = ToggleSortByX(state.sortType, props.data, props.yKey));
+
+    const cssProps = computed(() => {
       return {
-        "--bar-color": this.barColor || "steelblue",
-        "--hover-color": this.hoverColor || "orange"
+        "--bar-color": props.barColor || "steelblue",
+        "--hover-color": props.hoverColor || "orange"
       };
-    }
-  },
-  watch: {
-    dataCount() {
-      setTimeout(() => {
-        GrowAll(
-          this.groupId,
-          this.data,
-          this.ScaleY,
-          this.yKey,
-          this.svgHeight
-        );
-      }, 10);
-    }
-  },
-  mounted() {
-    this.svgWidth = this.$refs.container.offsetWidth * 0.75;
-    this.AddResizeListener();
-    // TODO: ADD TOGGLE FOR DIFFERENT LOAD ANIMATIONS
-    GrowAll(this.groupId, this.data, this.ScaleY, this.yKey, this.svgHeight);
-    setTimeout(() => {
-      this.animate = true;
-    }, 1100);
-  },
-  methods: {
-    ScaleY(val) {
-      return Numbers.normalizeToRange(
-        val,
-        this.dataMin > 0 ? 0 : this.dataMin,
-        this.dataMax,
-        this.svgHeight,
-        0
-      );
-    },
-    ScaleX(val) {
-      return Numbers.normalizeToRange(val, 0, this.dataCount, 0, this.svgWidth);
-    },
-    SortX() {
-      this.sortType = ToggleSortByX(this.sortType, this.data, this.yKey);
-    },
-    /**
-     * @vuese
-     * Add a listener to update and redraw the chart after X seconds of a resize event.
-     */
-    AddResizeListener() {
-      // redraw the chart 300ms after the window has been resized
-      const self = this;
-      window.addEventListener("resize", () => {
-        self.redrawToggle = false;
-        setTimeout(() => {
-          self.redrawToggle = true;
-          self.svgWidth = self.$refs.container.offsetWidth * 0.85;
-          GrowAll(
-            this.groupId,
-            this.data,
-            this.ScaleY,
-            this.yKey,
-            this.svgHeight
-          );
-        }, 300);
-      });
-    }
+    });
+
+    watch(dataCount, () => setTimeout(() => AnimateGrow(), 10));
+
+    onMounted(() => {
+      state.svgWidth = container.value.offsetWidth * 0.85;
+      addResizeListener(state, container.value, AnimateGrow);
+      AnimateGrow();
+      setTimeout(() => (state.animate = true), 1100); // turn on sort
+    });
+
+    return {
+      state,
+      container,
+      dataCount,
+      dataMax,
+      dataMin,
+      groupId,
+      barWidth,
+      svgHeight,
+      sortTransition,
+      cssProps,
+      SortX,
+      ScaleY,
+      ScaleX,
+      AnimateGrow
+    };
   }
 };
 </script>
 
 <style scoped lang="scss">
+@import "../css/transitions";
+
 .chart-title {
 }
 .bar-label-top {
@@ -246,20 +188,5 @@ export default {
 .bar-positive:hover {
   /*transition-duration: 0.3s;*/
   fill: var(--hover-color);
-}
-
-.flip-list {
-  &-move {
-    transition: transform 0.5s ease-in-out;
-    transition-delay: calc(0.15s * var(--i));
-  }
-  &-enter-active,
-  &-leave-active {
-    transition: opacity 2s;
-  }
-  &-enter,
-  &-leave-to {
-    opacity: 0;
-  }
 }
 </style>

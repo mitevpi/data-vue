@@ -12,6 +12,7 @@ module.exports = {
     "eslint:recommended"
   ],
   rules: {
+    "no-return-assign": "warn",
     "import/no-extraneous-dependencies": "off",
     "class-methods-use-this": "off",
     "vue/no-unused-vars": "warn",
