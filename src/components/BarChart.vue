@@ -38,19 +38,15 @@
           </g>
 
           <fade>
-            <g v-if="bottomLabels">
-              <transition-group :name="sortTransition" tag="g">
-                <text
-                  v-for="(item, i) in data"
-                  :key="item[xKey] + 'bottom'"
-                  :x="ScaleX(i)"
-                  :y="ScaleY(0) + 20"
-                  class="bar-label-bottom"
-                  :style="{ '--i': i }"
-                >
-                  {{ item[xKey] }}
-                </text>
-              </transition-group>
+            <g v-if="bottomLabels" class="bar-label-bottom">
+              <bottom-labels
+                :name="sortTransition"
+                :scale-x="ScaleX"
+                :scale-y="ScaleY"
+                :data="data"
+                :bar-width="barWidth"
+                :x-key="xKey"
+              />
             </g>
           </fade>
         </g>
@@ -60,8 +56,15 @@
 </template>
 
 <script>
-import { reactive, computed, watch, ref, onMounted } from "@vue/composition-api";
+import {
+  reactive,
+  computed,
+  watch,
+  ref,
+  onMounted
+} from "@vue/composition-api";
 import Fade from "./Transitions/Fade.vue";
+import BottomLabels from "./Cartesian Charts/BottomLabels.vue";
 
 import datasetMetrics from "../hooks/dataUtil";
 import { createGroupId, goldenHeight } from "../hooks/svgUtil";
@@ -75,7 +78,8 @@ import { ToggleSortByX } from "../js/Sort";
 export default {
   name: "BarChart",
   components: {
-    Fade
+    Fade,
+    BottomLabels
   },
   props: {
     // Title of the chart

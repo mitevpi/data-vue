@@ -44,6 +44,7 @@
 <script>
 import { reactive, computed, ref, onMounted } from "@vue/composition-api";
 import Fade from "./Transitions/Fade.vue";
+import BottomLabels from "./Cartesian Charts/BottomLabels.vue";
 
 // hooks
 import datasetMetrics from "../hooks/dataUtil";
@@ -58,7 +59,7 @@ export default {
   name: "PointPlot",
   components: {
     Fade,
-    BottomLabels: () => import("./Cartesian Charts/BottomLabels.vue")
+    BottomLabels
   },
   props: {
     // Title of the chart
@@ -70,7 +71,7 @@ export default {
     // The array of data objects to visualize
     data: Array,
     // (Optional) The default color to apply on the bars
-    barColor: String,
+    pointColor: String,
     // (Optional) The color to apply on the bars when hovered over
     hoverColor: String,
     // (Optional) Whether or not to have labels at the bottom of each bar
@@ -107,7 +108,7 @@ export default {
 
     const cssProps = computed(() => {
       return {
-        "--point-color": props.barColor || "steelblue",
+        "--point-color": props.pointColor || "steelblue",
         "--hover-color": props.hoverColor || "orange"
       };
     });

@@ -1,13 +1,13 @@
 <template>
   <div class="center global-font">
-    <!--    <bar-chart-->
-    <!--      title="Bar Chart"-->
-    <!--      x-key="name"-->
-    <!--      y-key="amount"-->
-    <!--      :data="barChartData"-->
-    <!--      :top-labels="true"-->
-    <!--      :bottom-labels="true"-->
-    <!--    />-->
+    <bar-chart
+      title="Bar Chart"
+      x-key="name"
+      y-key="amount"
+      :data="barChartData"
+      :top-labels="true"
+      :bottom-labels="true"
+    />
     <!--    <circle-pack-->
     <!--      :width="600"-->
     <!--      :height="600"-->
@@ -42,8 +42,8 @@ import { MockData } from "@mitevpi/algos";
 export default {
   name: "App",
   components: {
-    // BarChart: () => import("./components/BarChart.vue")
-    // CirclePack: () => import("./components/CirclePack.vue")
+    BarChart: () => import("./components/BarChart.vue"),
+    // CirclePack: () => import("./components/CirclePack.vue"),
     // Network: () => import("./components/Network.vue"),
     PointPlot: () => import("./components/PointPlot.vue")
   },
@@ -87,7 +87,7 @@ export default {
 <style>
 .center {
   margin: auto;
-  width: 50%;
+  width: 60%;
   /* border: 3px solid green; */
   padding: 10px;
 }
