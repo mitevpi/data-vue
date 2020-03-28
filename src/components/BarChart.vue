@@ -168,6 +168,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "../css/transitions";
+
 .chart-title {
 }
 .bar-label-top {
@@ -182,20 +184,5 @@ export default {
 .bar-positive:hover {
   /*transition-duration: 0.3s;*/
   fill: var(--hover-color);
-}
-
-.flip-list {
-  &-move {
-    transition: transform 0.5s ease-in-out;
-    transition-delay: calc(0.15s * var(--i));
-  }
-  &-enter-active,
-  &-leave-active {
-    transition: opacity 2s;
-  }
-  &-enter,
-  &-leave-to {
-    opacity: 0;
-  }
 }
 </style>

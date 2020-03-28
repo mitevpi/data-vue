@@ -8,35 +8,31 @@
         :height="svgHeight * 1.25"
         @click="SortX"
       >
-        <!--TODO: Figure out better logic for not cutting off labels-->
         <g :id="groupId" transform="translate(0,20)">
-          <transition-group name="flip-list" tag="g">
-            <circle
-              v-for="(item, i) in data"
-              :key="item[xKey] + 'point'"
-              :cx="ScaleX(i) + barWidth / 2"
-              :cy="ScaleY(item[yKey])"
-              :style="{ '--i': i }"
-              class="point-positive"
-              r="10"
-            />
-          </transition-group>
+          <g>
+            <transition-group name="flip-list" tag="g">
+              <circle
+                v-for="(item, i) in data"
+                :key="item[xKey] + 'point'"
+                :cx="ScaleX(i) + barWidth / 2"
+                :cy="ScaleY(item[yKey])"
+                :style="{ '--i': i }"
+                class="point-positive"
+                r="10"
+              />
+            </transition-group>
+          </g>
 
           <fade>
-            <g v-if="bottomLabels">
-              <transition-group :name="sortTransition" tag="g">
-                <text
-                  v-for="(item, i) in data"
-                  :key="item[xKey] + 'bottom'"
-                  :x="ScaleX(i) + barWidth / 2"
-                  :y="ScaleY(0) + 20"
-                  class="point-label-bottom"
-                  :style="{ '--i': i }"
-                  text-anchor="middle"
-                >
-                  {{ item[xKey] }}
-                </text>
-              </transition-group>
+            <g v-if="bottomLabels" class="point-label-bottom">
+              <bottom-labels
+                :name="sortTransition"
+                :scale-x="ScaleX"
+                :scale-y="ScaleY"
+                :data="data"
+                :bar-width="barWidth"
+                :x-key="xKey"
+              />
             </g>
           </fade>
         </g>
@@ -49,17 +45,20 @@
 import { reactive, computed, ref, onMounted } from "@vue/composition-api";
 import Fade from "./Transitions/Fade.vue";
 
+// hooks
 import datasetMetrics from "../hooks/dataUtil";
 import { createGroupId, goldenHeight } from "../hooks/svgUtil";
 import { scale, scaleYLinear, scaleXLinear } from "../hooks/scale";
 
+// methods
 import { ToggleSortByX } from "../js/Sort";
 
 // Animated, reactive line chart
 export default {
   name: "PointPlot",
   components: {
-    Fade
+    Fade,
+    BottomLabels: () => import("./Cartesian Charts/BottomLabels.vue")
   },
   props: {
     // Title of the chart
@@ -90,10 +89,8 @@ export default {
     });
 
     const svgWidthComputed = computed(() => state.svgWidth);
-
     const barWidth = scale(svgWidthComputed, dataCount);
     const svgHeight = goldenHeight(svgWidthComputed);
-
     const sortTransition = computed(() =>
       state.animate ? "flip-list" : "disabled-list"
     );
@@ -140,12 +137,17 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "../css/transitions";
+
 .chart-title {
 }
+
 .point-label-top {
 }
+
 .point-label-bottom {
 }
+
 .point-positive {
   /*transition-duration: 0.3s;*/
   fill: var(--point-color);
@@ -154,20 +156,5 @@ export default {
 .point-positive:hover {
   /*transition-duration: 0.3s;*/
   fill: var(--hover-color);
-}
-
-.flip-list {
-  &-move {
-    transition: transform 0.5s ease-in-out;
-    transition-delay: calc(0.15s * var(--i));
-  }
-  &-enter-active,
-  &-leave-active {
-    transition: opacity 2s;
-  }
-  &-enter,
-  &-leave-to {
-    opacity: 0;
-  }
 }
 </style>
