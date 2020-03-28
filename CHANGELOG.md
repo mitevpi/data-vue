@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/mitevpi/data-vue/compare/v0.2.5...v0.3.0) (2020-03-28)
+
 ### [0.2.5](https://github.com/mitevpi/data-vue/compare/v0.2.4...v0.2.5) (2020-03-15)
 
 ### [0.2.4](https://github.com/mitevpi/data-vue/compare/v0.2.3...v0.2.4) (2020-02-28)

@@ -1,6 +1,6 @@
 {
   "name": "@mitevpi/v3",
-  "version": "0.2.5",
+  "version": "0.3.0",
   "description": "Interactive & customizable D3 data visualization components for Vue.js.",
   "license": "MIT",
   "repository": "mitevpi/data-vue",
@@ -16,7 +16,7 @@
     "test": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint --fix",
     "docs": "vuese gen --outDir=docs",
-    "prerelease": "npm run lint --fix & npm t && npm run build && npm run docs",
+    "prerelease": "npm run lint --fix & npm t & npm run build && npm run docs",
     "release": "standard-version",
     "postpublish": "git push origin master --follow-tags",
     "bundle-report": "webpack-bundle-analyzer --port 4200 dist/stats.json"
